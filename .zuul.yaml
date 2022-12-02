@@ -1,0 +1,11 @@
+- project:
+    merge-mode: "squash-merge"
+    check:
+      jobs:
+        - tox-linters
+    gate:
+      jobs:
+        - tox-linters
+    post:
+      jobs:
+        - tox-linters

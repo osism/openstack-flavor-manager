@@ -1,0 +1,126 @@
+---
+# prefixes (required)
+prefixes:
+  - "SCS-"
+
+
+# cpus (required)
+cpu_counts:  # required - this can be extended
+  - "1"
+cpu_suffixes:  # optional
+  - "L"
+  - "V"
+  - "T"
+  - "C"
+cpu_securities:  # optional
+  - "i"
+
+
+# rams (required)
+ram_counts:  # required - this can be extended
+  - ":0.5"
+ram_suffixes:  # optional
+  - "u"
+  - "o"
+  - "uo"
+
+
+# disks (optional)
+disk_suffixes:  # optional
+  - "n"
+  - "h"
+  - "s"
+  - "p"
+disk_amounts:  # optional - this can be extended
+  - "3x"
+disk_sizes:  # optional - this can be extended
+  - "10"
+
+
+# virtualizations (optional)
+hypervisors:  # optional
+  - "kvm"
+  - "xen"
+  - "vmw"
+  - "hyv"
+  - "bms"
+nesteds:  # optional
+  - "hwv"
+
+# archs (optional)
+arch_vendors:  # required
+  - "i"
+  - "z"
+  - "a"
+arch_generations:  # optional - this can be extended
+  - "0"
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+arch_frequencies:  # optional
+  - "h"
+  - "hh"
+  - "hhh"
+
+# gpus (optional)
+gpu_modes:  # optional
+  - "g"
+  - "G"
+gpu_models:  # required
+  - name: "N"
+    generations:  # optional
+      - name: "f"
+        compute_units:
+          - "1"
+      - name: "k"
+        compute_units:
+          - "1"
+      - name: "m"
+        compute_units:
+          - "1"
+      - name: "p"
+        compute_units:
+          - "1792"
+      - name: "v"
+        compute_units:
+          - "5120"
+      - name: "t"
+        compute_units:
+          - "1"
+      - name: "a"
+        compute_units:
+          - "6912"
+      - name: "h"
+        compute_units:
+          - "16896"
+  - name: "A"
+    generations:  # optional
+      - name: "0"
+        compute_units:
+          - "1"
+      - name: "1"
+        compute_units:
+          - "1"
+      - name: "2"
+        compute_units:
+          - "1"
+      - name: "3"
+        compute_units:
+          - "1"
+  - name: "I"
+    generations:  # optional
+      - name: "0"
+        compute_units:
+          - "1"
+      - name: "1"
+        compute_units:
+          - "1"
+gpu_hbms:  # optional
+  - "h"
+  - "hh"
+  - "hhh"
+
+# special (optional) - all combinations possible
+specials:  # required
+  - "-ib"
