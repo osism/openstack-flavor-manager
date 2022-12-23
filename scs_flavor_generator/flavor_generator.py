@@ -40,7 +40,7 @@ gpu_models = rules['gpu_models']
 gpu_hbms = rules['gpu_hbms']
 
 # special (optional) - all combinations possible
-sepcials = [""]  # allow empty
+specials = [""]  # allow empty
 special_list = rules['specials']
 
 
@@ -179,5 +179,5 @@ for prefix in prefixes:
                 for virtualization in virtualizations:
                     for arch in archs:
                         for gpu in gpus:
-                            for special in sepcials:
+                            for special in specials:
                                 print(f"{prefix}{cpu}{ram}{disk}{virtualization}{arch}{gpu}{special}")
