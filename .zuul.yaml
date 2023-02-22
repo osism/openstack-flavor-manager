@@ -1,11 +1,10 @@
+---
 - project:
     merge-mode: "squash-merge"
+    default-branch: main
     check:
       jobs:
-        - tox-linters
+        - flake8
     gate:
       jobs:
-        - tox-linters
-    post:
-      jobs:
-        - tox-linters
+        - flake8
