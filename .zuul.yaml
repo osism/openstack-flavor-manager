@@ -8,3 +8,6 @@
     gate:
       jobs:
         - flake8
+    periodic-daily:
+      jobs:
+        - flake8
