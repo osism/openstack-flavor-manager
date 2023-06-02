@@ -15,9 +15,9 @@ def validate(url: str = typer.Argument("scs"), cloudbackend: str = typer.Option(
 
 
 @app.command("ensure")
-def ensure(url: str, cloudbackend: str = typer.Option("openstack")) -> None:
+def ensure(url: str, cloudbackend: str = typer.Option("openstack"), recommended: bool = False) -> None:
     cloud = Cloud(backend=cloudbackend)
-    object = Ensure(cloud=cloud, url=url)
+    object = Ensure(cloud=cloud, url=url, recommended=recommended)
     object.ensure()
 
 
