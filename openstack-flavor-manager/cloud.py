@@ -30,7 +30,7 @@ class Cloud:
             return flavor_list
 
     def set_flavor(self, flavor_spec: dict) -> int:
-        if self.backend == "openstacks":
+        if self.backend == "openstack":
             flavor_id = self.conn.create_flavor(
                 name=flavor_spec['name'],
                 ram=flavor_spec['ram'],
