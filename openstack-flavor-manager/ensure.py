@@ -8,9 +8,11 @@ logging.basicConfig(format='%(levelname)s: %(message)s')
 
 
 class Ensure:
-    def __init__(self, cloud: Cloud, url: str):
+    def __init__(self, cloud: Cloud, url: str, recommended: bool = False):
         self.required_flavors = get_url(url, 'mandatory')
         self.cloud = cloud
+        if recommended:
+            self.required_flavors = self.required_flavors + get_url(url, 'recommended')
 
     def ensure(self) -> None:
         for required_flavor in self.required_flavors:
