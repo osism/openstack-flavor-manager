@@ -46,6 +46,6 @@ class Cloud:
             # extra-specs
             self.conn.set_flavor_specs(
                 flavor_id=flavor_id,
-                extra_specs=...,
+                extra_specs={},
             )
             return flavor_id
