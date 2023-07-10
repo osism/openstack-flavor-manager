@@ -6,6 +6,19 @@ import openstack
 import os
 
 
+def get_spec_or_default(key_string, flavor_spec, defaults):
+    if key_string in flavor_spec:
+        return flavor_spec[key_string]
+    elif key_string in defaults:
+        return defaults[key_string]
+    else:
+        raise UnknownSpecKeyException
+
+
+class UnknownSpecKeyException(BaseException):
+    pass
+
+
 class Cloud:
     openstack = {
         "name": "name",
@@ -29,17 +42,17 @@ class Cloud:
             flavor_list = self.conn.search_flavors()
             return flavor_list
 
-    def set_flavor(self, flavor_spec: dict) -> int:
+    def set_flavor(self, flavor_spec: dict, defaults: dict) -> int:
         if self.backend == "openstack":
             flavor_id = self.conn.create_flavor(
-                name=flavor_spec['name'],
-                ram=flavor_spec['ram'],
-                vcpus=flavor_spec['cpus'],
-                disk=flavor_spec['disk'],
+                name=get_spec_or_default(key_string='name', flavor_spec=flavor_spec, defaults=defaults),
+                ram=get_spec_or_default(key_string='ram', flavor_spec=flavor_spec, defaults=defaults),
+                vcpus=get_spec_or_default(key_string='cpus', flavor_spec=flavor_spec, defaults=defaults),
+                disk=get_spec_or_default(key_string='disk', flavor_spec=flavor_spec, defaults=defaults),
                 ephemeral=0,
                 swap=0,
                 rxtx_factor=1.0,
-                is_public=flavor_spec['public']
+                is_public=get_spec_or_default(key_string='public', flavor_spec=flavor_spec, defaults=defaults)
             )
             # description
             # properties
