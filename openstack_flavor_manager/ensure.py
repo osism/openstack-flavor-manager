@@ -16,8 +16,10 @@ class Ensure:
 
     def ensure(self) -> None:
         for required_flavor in self.required_flavors:
-            flavor_id = self.cloud.set_flavor(flavor_spec=required_flavor, defaults=self.defaults_dict)
-            if flavor_id:
-                logging.info(f"Flavor created: {required_flavor['name']}")
-            else:
+            try:
+                flavor = self.cloud.set_flavor(flavor_spec=required_flavor, defaults=self.defaults_dict)
+                if flavor:
+                    logging.info(f"Flavor created: {required_flavor['name']}")
+            except Exception as e:
                 logging.error(f"Flavor could not be created: {required_flavor['name']}")
+                logging.error(e)
