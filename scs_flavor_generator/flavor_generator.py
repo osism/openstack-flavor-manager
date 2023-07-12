@@ -165,9 +165,12 @@ for gpu_mode in gpu_modes:
 # build specials
 #########################################
 # since every combination is possible, build a powerset
-specials.append(itertools.chain.from_iterable(
+chain = itertools.chain.from_iterable(
     itertools.combinations(special_list, r) for r in range(len(special_list) + 1)
-))
+)
+
+for c in chain:
+    specials.append("".join(c))
 
 #########################################
 # build all possible SCS flavors
