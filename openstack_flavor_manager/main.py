@@ -15,14 +15,19 @@ def ensure(url: str, cloud_backend: str = typer.Option("openstack"), recommended
     ensure_object.ensure()
 
 
-# Add empty callback to enable "ensure" as a single command in typer
+# This is needed for:
+# 1) Global app option handling
+# 2) Prevent that the single "ensure" command is automatically ommited
 @app.callback()
-def callback():
-    pass
+def callback(debug_logging: bool = typer.Option(False, "--debug", help="Enable debug logging")):
+    logging.basicConfig(
+        level=logging.INFO if not debug_logging else logging.DEBUG,
+        format="%(asctime)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
 
 
 def main():
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     app()
 
 
