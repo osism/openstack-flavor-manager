@@ -2,11 +2,8 @@ import logging
 from cloud import Cloud
 
 
-logging.basicConfig(format='%(levelname)s: %(message)s')
-
-
 class Ensure:
-    def __init__(self, cloud: Cloud, url: str, recommended: bool = False, definitions: dict = None) -> None:
+    def __init__(self, cloud: Cloud, url: str, definitions: dict, recommended: bool = False) -> None:
         self.required_flavors = definitions['mandatory']
         self.cloud = cloud
         if recommended:
