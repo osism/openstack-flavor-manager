@@ -12,8 +12,6 @@ def get_url(url: str) -> dict:
     logging.debug(f"Loading flavor definitions from {url}")
 
     result = requests.get(url)
+    result.raise_for_status()
 
-    try:
-        return yaml.safe_load(result.content)
-    except yaml.YAMLError as exc:
-        logging.error(exc)
+    return yaml.safe_load(result.content)
