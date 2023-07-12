@@ -1,0 +1,31 @@
+---
+name: Run flake8 style checking
+
+"on":
+  push:
+    paths:
+      - openstack_flavor_manager/**
+      - test/**
+      - .github/workflows/run-flake.yml
+      - requirements.txt
+      - tox.ini
+    branches:
+      - main
+  pull_request:
+    paths:
+      - openstack_flavor_manager/**
+      - test/**
+      - .github/workflows/run-flake.yml
+      - requirements.txt
+      - tox.ini
+
+jobs:
+  test-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: pip3 install flake8
+      - run: cd openstack_flavor_manager; flake8 .
