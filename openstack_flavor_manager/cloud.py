@@ -2,6 +2,8 @@
 # files (flavor.yaml) and the respective cloud backend. E.g. the "cpus" item
 # relates to "vcpus" in an OpenStack environment.
 # Other cloud software might be added in the future.
+import logging
+from openstack.compute.v2.flavor import Flavor
 import openstack
 import os
 
@@ -23,14 +25,18 @@ class Cloud:
 
     def __init__(self) -> None:
         self.conn = openstack.connect(cloud=os.environ.get("OS_CLOUD"))
+        self.existing_flavors = self.conn.list_flavors()
+        self.existing_flavor_names = set(flavor.name for flavor in self.existing_flavors)
 
-    def get_flavors(self) -> list:
-        flavor_list = self.conn.search_flavors()
-        return flavor_list
+    def set_flavor(self, flavor_spec: dict, defaults: dict) -> Flavor | None:
+        flavor_name = get_spec_or_default(key_string='name', flavor_spec=flavor_spec, defaults=defaults)
 
-    def set_flavor(self, flavor_spec: dict, defaults: dict) -> int:
-        flavor_id = self.conn.create_flavor(
-            name=get_spec_or_default(key_string='name', flavor_spec=flavor_spec, defaults=defaults),
+        if flavor_name in self.existing_flavor_names:
+            # OpenStack does not allow to update flavour_specs, so we only return a warning for manual intervention
+            logging.warning(f"Flavor with name '{flavor_name}' already exists. Skipping.")
+            return None
+        flavor = self.conn.create_flavor(
+            name=flavor_name,
             ram=get_spec_or_default(key_string='ram', flavor_spec=flavor_spec, defaults=defaults),
             vcpus=get_spec_or_default(key_string='cpus', flavor_spec=flavor_spec, defaults=defaults),
             disk=get_spec_or_default(key_string='disk', flavor_spec=flavor_spec, defaults=defaults),
@@ -39,10 +45,8 @@ class Cloud:
             rxtx_factor=1.0,
             is_public=get_spec_or_default(key_string='public', flavor_spec=flavor_spec, defaults=defaults)
         )
-
         self.conn.set_flavor_specs(
-            flavor_id=flavor_id,
+            flavor_id=flavor.id,
             extra_specs={},
         )
-
-        return flavor_id
+        return flavor
