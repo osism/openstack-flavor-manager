@@ -12,6 +12,10 @@ def ensure(url: str, cloudbackend: str = typer.Option("openstack"), recommended:
     object = Ensure(cloud=cloud, url=url, recommended=recommended)
     object.ensure()
 
+# Add empty callback to enable "ensure" as a single command in typer
+@app.callback()
+def callback():
+    pass
 
 def main():
     app()
