@@ -11,7 +11,7 @@ app = typer.Typer(help="Client to manage OpenStack flavors")
 def ensure(url: str, cloud_backend: str = typer.Option("openstack"), recommended: bool = False) -> None:
     flavour_definitions = get_url(url)
     cloud = Cloud()
-    ensure_object = Ensure(cloud=cloud, url=url, definitions=flavour_definitions, recommended=recommended)
+    ensure_object = Ensure(cloud=cloud, definitions=flavour_definitions, recommended=recommended)
     ensure_object.ensure()
 
 
