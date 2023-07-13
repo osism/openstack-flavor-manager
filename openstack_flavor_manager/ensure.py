@@ -3,7 +3,7 @@ from cloud import Cloud
 
 
 class Ensure:
-    def __init__(self, cloud: Cloud, url: str, definitions: dict, recommended: bool = False) -> None:
+    def __init__(self, cloud: Cloud, definitions: dict, recommended: bool = False) -> None:
         self.required_flavors = definitions['mandatory']
         self.cloud = cloud
         if recommended:
