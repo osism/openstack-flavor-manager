@@ -5,9 +5,12 @@
     check:
       jobs:
         - flake8
+        - mypy
     gate:
       jobs:
         - flake8
+        - mypy
     periodic-daily:
       jobs:
         - flake8
+        - mypy
