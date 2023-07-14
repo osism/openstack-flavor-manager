@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyyaml = ">=6.0"
+openstacksdk = ">=0.103.0"
+requests = ">=2.25.1"
+typer = ">=0.7.0"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
