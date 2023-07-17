@@ -1,5 +1,5 @@
 import logging
-from cloud import Cloud
+from openstack_flavor_manager.cloud import Cloud
 
 
 class Ensure:
