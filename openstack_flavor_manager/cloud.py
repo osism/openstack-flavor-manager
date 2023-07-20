@@ -55,6 +55,7 @@ class Cloud:
             ephemeral=0,
             swap=0,
             rxtx_factor=1.0,
+            description=get_spec_or_default(key_string='description', flavor_spec=flavor_spec, defaults=defaults),
             is_public=get_spec_or_default(key_string='public', flavor_spec=flavor_spec, defaults=defaults, is_bool=True)
         )
         self.conn.set_flavor_specs(
