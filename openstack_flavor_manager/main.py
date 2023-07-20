@@ -1,8 +1,8 @@
 import typer
 import logging
-from reference import get_url
-from cloud import Cloud
-from ensure import Ensure
+from openstack_flavor_manager.reference import get_url
+from openstack_flavor_manager.cloud import Cloud
+from openstack_flavor_manager.ensure import Ensure
 
 app = typer.Typer(help="Client to manage OpenStack flavors")
 

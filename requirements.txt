@@ -2,3 +2,4 @@ PyYAML>=6.0
 openstacksdk>=0.103.0
 requests>=2.25.1
 typer>=0.7.0
+munch>=4.0.0
