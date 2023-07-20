@@ -288,6 +288,40 @@ class TestCloud(unittest.TestCase):
 
     def test_spec_or_default_2(self):
         test_spec = {
+            "existing_key": "true",
+            "existing_key_2": True,
+            "existing_key_3": "false",
+            "existing_key_4": False,
+            "existing_key_5": "TrUe",
+            "existing_key_6": "notabool",
+        }
+        default_spec = {
+            "default_key": "true",
+            "default_key_2": False
+        }
+
+        # Check if is_bool flag is honored
+        self.assertEqual(cloud.get_spec_or_default("existing_key", test_spec, default_spec, is_bool=False), "true")
+
+        # Check if booleans are converted correctly
+        self.assertEqual(cloud.get_spec_or_default("existing_key", test_spec, default_spec, is_bool=True), True)
+        self.assertEqual(cloud.get_spec_or_default("existing_key_2", test_spec, default_spec, is_bool=True), True)
+        self.assertEqual(cloud.get_spec_or_default("existing_key_3", test_spec, default_spec, is_bool=True), False)
+        self.assertEqual(cloud.get_spec_or_default("existing_key_4", test_spec, default_spec, is_bool=True), False)
+        self.assertEqual(cloud.get_spec_or_default("existing_key_5", test_spec, default_spec, is_bool=True), True)
+
+        self.assertRaises(ValueError,
+                          cloud.get_spec_or_default,
+                          "existing_key_6",
+                          test_spec,
+                          default_spec,
+                          is_bool=True)
+
+        self.assertEqual(cloud.get_spec_or_default("default_key", test_spec, default_spec, is_bool=True), True)
+        self.assertEqual(cloud.get_spec_or_default("default_key_2", test_spec, default_spec, is_bool=True), False)
+
+    def test_spec_or_default_3(self):
+        test_spec = {
             "existing_key": "value1",
             "existing_key_2": "value2"
         }
@@ -297,8 +331,7 @@ class TestCloud(unittest.TestCase):
         }
 
         # Check if Exception is raised
-        self.assertRaises(cloud.UnknownSpecKeyException, cloud.get_spec_or_default, "unknown_key", test_spec,
-                          default_spec)
+        self.assertRaises(ValueError, cloud.get_spec_or_default, "unknown_key", test_spec, default_spec)
 
     @mock.patch("openstack.openstack.connect")
     def test_init_0(self, mock_connect):

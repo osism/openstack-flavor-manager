@@ -8,17 +8,29 @@ import openstack
 import os
 
 
-def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict) -> object:
-    if key_string in flavor_spec:
-        return flavor_spec[key_string]
-    elif key_string in defaults:
-        return defaults[key_string]
+def str_to_bool(string_bool: str | bool) -> bool:
+    if isinstance(string_bool, bool):
+        return string_bool
+    s = str(string_bool).lower()
+    if s == 'true':
+        return True
+    elif s == 'false':
+        return False
     else:
-        raise UnknownSpecKeyException
+        raise ValueError(f"Unknown boolean value '{string_bool}'")
 
 
-class UnknownSpecKeyException(BaseException):
-    pass
+def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict, is_bool: bool = False):
+    if key_string in flavor_spec:
+        value = flavor_spec[key_string]
+    elif key_string in defaults:
+        value = defaults[key_string]
+    else:
+        raise ValueError(f"Unknown key_string '{key_string}'")
+
+    if is_bool:
+        return str_to_bool(value)
+    return value
 
 
 class Cloud:
@@ -43,7 +55,7 @@ class Cloud:
             ephemeral=0,
             swap=0,
             rxtx_factor=1.0,
-            is_public=get_spec_or_default(key_string='public', flavor_spec=flavor_spec, defaults=defaults)
+            is_public=get_spec_or_default(key_string='public', flavor_spec=flavor_spec, defaults=defaults, is_bool=True)
         )
         self.conn.set_flavor_specs(
             flavor_id=flavor.id,
