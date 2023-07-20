@@ -1,0 +1,5 @@
+---
+clouds:
+  openstack:
+    auth:
+      password: password
