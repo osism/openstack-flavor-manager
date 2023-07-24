@@ -14,7 +14,7 @@
       jobs:
         - flake8
         - mypy
-        - tox-py310:
+        - tox-py39:
             vars:
               tox_envlist: test
         - flavor-manager-integration-test
@@ -22,7 +22,7 @@
       jobs:
         - flake8
         - mypy
-        - tox-py310:
+        - tox-py39:
             vars:
               tox_envlist: test
         - flavor-manager-integration-test
@@ -30,7 +30,7 @@
       jobs:
         - flake8
         - mypy
-        - tox-py310:
+        - tox-py39:
             vars:
               tox_envlist: test
         - flavor-manager-integration-test
