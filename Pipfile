@@ -10,6 +10,7 @@ requests = ">=2.25.1"
 typer = ">=0.7.0"
 
 [dev-packages]
+munch = "*"
 
 [requires]
 python_version = "3.10"
