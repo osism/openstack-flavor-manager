@@ -1,4 +1,12 @@
 ---
+- job:
+    name: flavor-manager-integration-test
+    pre-run: playbooks/pre-integration-test.yml
+    run: playbooks/integration-test.yml
+    roles:
+      - zuul: osism/zuul-jobs
+        name: devstack
+
 - project:
     merge-mode: "squash-merge"
     default-branch: main
@@ -9,6 +17,7 @@
         - tox-py310:
             vars:
               tox_envlist: test
+        - flavor-manager-integration-test
     gate:
       jobs:
         - flake8
@@ -16,6 +25,7 @@
         - tox-py310:
             vars:
               tox_envlist: test
+        - flavor-manager-integration-test
     periodic-daily:
       jobs:
         - flake8
@@ -23,3 +33,4 @@
         - tox-py310:
             vars:
               tox_envlist: test
+        - flavor-manager-integration-test

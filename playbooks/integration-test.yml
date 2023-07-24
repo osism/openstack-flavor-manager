@@ -1,0 +1,11 @@
+---
+- name: Integration test play
+  hosts: all
+
+  vars:
+    zuul_work_dir: "{{ zuul.project.src_dir }}"
+
+  roles:
+    - role: tox
+      vars:
+        tox_extra_args: -- ensure scs
