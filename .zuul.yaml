@@ -3,11 +3,12 @@
     name: flavor-manager-integration-test
     pre-run: playbooks/pre-integration-test.yml
     run: playbooks/integration-test.yml
+    timeout: 3600
     roles:
       - zuul: osism/zuul-jobs
         name: devstack
     vars:
-      devstack_services: "keystone g-api n-api"
+      devstack_services: "keystone n-api"
 
 - project:
     merge-mode: "squash-merge"
