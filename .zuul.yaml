@@ -6,6 +6,8 @@
     roles:
       - zuul: osism/zuul-jobs
         name: devstack
+    vars:
+      devstack_services: "keystone g-api n-api"
 
 - project:
     merge-mode: "squash-merge"
@@ -14,7 +16,7 @@
       jobs:
         - flake8
         - mypy
-        - tox-py39:
+        - tox:
             vars:
               tox_envlist: test
         - flavor-manager-integration-test
@@ -22,7 +24,7 @@
       jobs:
         - flake8
         - mypy
-        - tox-py39:
+        - tox:
             vars:
               tox_envlist: test
         - flavor-manager-integration-test
@@ -30,7 +32,7 @@
       jobs:
         - flake8
         - mypy
-        - tox-py39:
+        - tox:
             vars:
               tox_envlist: test
         - flavor-manager-integration-test
