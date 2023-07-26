@@ -8,7 +8,10 @@
       - zuul: osism/zuul-jobs
         name: devstack
     vars:
-      devstack_services: "keystone n-api"
+      devstack_services:
+        keystone: true
+        nova: true
+
 
 - project:
     merge-mode: "squash-merge"
