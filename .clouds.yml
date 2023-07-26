@@ -4,7 +4,7 @@
 clouds:
   openstack:
     auth:
-      auth_url: http://127.0.0.1/identity
+      auth_url: http://localhost/identity
       username: admin
       password: password
       project_name: admin

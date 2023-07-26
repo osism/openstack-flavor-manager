@@ -8,9 +8,7 @@
       - zuul: osism/zuul-jobs
         name: devstack
     vars:
-      devstack_services:
-        keystone: true
-        nova: true
+      devstack_services: "keystone nova neutron glance n-api n-cpu n-cond n-sch n-novnc n-cauth g-api mysql rabbit placement-api q-svc q-dhcp q-meta"
 
 
 - project:
