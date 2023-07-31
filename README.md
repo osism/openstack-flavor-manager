@@ -1,6 +1,12 @@
 # Openstack flavor manager
 
-Create OpenStack flavors based on a yaml file.
+[![PyPi version](https://badgen.net/pypi/v/openstack-flavor-manager/)](https://pypi.org/project/openstack-flavor-manager/)
+[![PyPi license](https://badgen.net/pypi/license/openstack-flavor-manager/)](https://pypi.org/project/openstack-flavor-manager/)
+
+Easily create OpenStack flavors based on standardised yaml files
+
+Documentation: <https://docs.scs.community/docs/category/openstack-flavor-manager>
+
 
 ## Usage
 
@@ -8,7 +14,7 @@ Create OpenStack flavors based on a yaml file.
 python -m openstack_flavor_manager.main --help
 ```
 
-E.g. if you want to create flavors, that belong to the SCS standard, use:
+E.g. if you want to create flavors, which belong to the SCS standard, use:
 
 ```py
 python -m openstack_flavor_manager.main ensure scs
