@@ -1,0 +1,46 @@
+---
+- name: Build Python Package
+  hosts: all
+
+  vars:
+    zuul_work_dir: "{{ zuul.project.src_dir }}"
+
+  tasks:
+    - name: Install Python
+      ansible.builtin.include_role:
+        name: "{{ item }}"
+      loop:
+        - ensure-python
+        - ensure-pip
+
+    - name: Install pip modules
+      ansible.builtin.pip:
+        name: "{{ item }}"
+        executable: pip3
+      loop:
+        - build
+        - twine
+
+    - name: Build Python package
+      ansible.builtin.command:
+        cmd: "/usr/bin/python3 -m build --sdist --wheel --outdir dist/ ."
+        chdir: "{{ zuul_work_dir }}"
+      changed_when: false
+
+    - name: Check package metadata
+      ansible.builting.command:
+        cmd: "twine check dist/*"
+        chdir: "{{ zuul_work_dir }}"
+      changed_when: false
+
+    - name: Publish package
+      ansible.builting.command:
+        cmd: "twine upload --verbose dist/*"
+        chdir: "{{ zuul_work_dir }}"
+      vars:
+        TWINE_USERNAME: "__token__"
+        TWINE_REPOSITORY_URL: "pypi.org"
+      secrets:
+        - name: TWINE_PASSWORD
+          secret: {{ secret.PYPI_API_TOKEN }}
+      changed_when: false
