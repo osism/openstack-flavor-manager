@@ -35,8 +35,8 @@ def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict, is_b
 
 class Cloud:
 
-    def __init__(self) -> None:
-        self.conn = openstack.connect(cloud=os.environ.get("OS_CLOUD"))
+    def __init__(self, cloud: str) -> None:
+        self.conn = openstack.connect(cloud=cloud)
         self.existing_flavors = self.conn.list_flavors()
         self.existing_flavor_names = set(flavor.name for flavor in self.existing_flavors)
 
