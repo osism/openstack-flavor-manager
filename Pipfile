@@ -4,13 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyyaml = ">=6.0"
-openstacksdk = ">=0.103.0"
-requests = ">=2.25.1"
-typer = ">=0.7.0"
+PyYAML = "==6.0.1"
+openstacksdk = "==1.5.0"
+requests = "==2.31.0"
+typer = {version = "==0.9.0", extras = ["all"]}
 
 [dev-packages]
-munch = "*"
+munch = "==4.0.0"
 
 [requires]
 python_version = "3.10"
