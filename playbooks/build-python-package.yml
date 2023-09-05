@@ -42,5 +42,5 @@
         TWINE_REPOSITORY_URL: "pypi.org"
       secrets:
         - name: TWINE_PASSWORD
-          secret: {{ secret.PYPI_API_TOKEN }}
+          secret: "{{ secret.PYPI_API_TOKEN }}"
       changed_when: false
