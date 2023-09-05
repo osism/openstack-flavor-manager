@@ -29,13 +29,13 @@
 
     - name: Check package metadata
       ansible.builtin.command:
-        cmd: "twine check dist/*"
+        cmd: "/usr/bin/python3 -m twine check dist/*"
         chdir: "{{ zuul_work_dir }}"
       changed_when: false
 
     - name: Publish package
       ansible.builtin.command:
-        cmd: "twine upload --verbose dist/*"
+        cmd: "/usr/bin/python3 -m twine upload --verbose dist/*"
         chdir: "{{ zuul_work_dir }}"
       vars:
         TWINE_USERNAME: "__token__"
