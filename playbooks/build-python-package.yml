@@ -28,13 +28,13 @@
       changed_when: false
 
     - name: Check package metadata
-      ansible.builting.command:
+      ansible.builtin.command:
         cmd: "twine check dist/*"
         chdir: "{{ zuul_work_dir }}"
       changed_when: false
 
     - name: Publish package
-      ansible.builting.command:
+      ansible.builtin.command:
         cmd: "twine upload --verbose dist/*"
         chdir: "{{ zuul_work_dir }}"
       vars:
