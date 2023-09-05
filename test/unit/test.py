@@ -6,7 +6,6 @@ from requests import HTTPError
 from yaml.parser import ParserError
 from openstack_flavor_manager import reference, cloud, ensure
 from munch import Munch
-import os
 from typer.testing import CliRunner
 
 from openstack_flavor_manager.main import app
@@ -151,7 +150,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions)
 
@@ -167,7 +166,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions, True)
 
@@ -186,7 +185,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions)
         test2 = ensure.Ensure(c, definitions, True)
@@ -206,7 +205,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions)
         test.ensure()
@@ -220,7 +219,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions, True)
         test.ensure()
@@ -235,7 +234,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions)
         test.ensure()
@@ -250,7 +249,7 @@ class TestEnsure(unittest.TestCase):
         definitions = yaml.safe_load(MOCK_YML)
 
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
 
         test = ensure.Ensure(c, definitions, True)
         test.ensure()
@@ -344,12 +343,7 @@ class TestCloud(unittest.TestCase):
             Munch({"name": "SCS-8V-32"})
         ]
 
-        oldenv = os.environ.get("OS_CLOUD", "")
-        os.environ["OS_CLOUD"] = "testcloud"
-
-        c = cloud.Cloud()
-
-        os.environ["OS_CLOUD"] = oldenv
+        c = cloud.Cloud(cloud="testcloud")
 
         # Check if connect and list_flavor command against fake openstack data was successful
         self.assertEqual(mock_connect.call_count, 1)
@@ -360,7 +354,7 @@ class TestCloud(unittest.TestCase):
     @mock.patch("openstack_flavor_manager.cloud.Cloud.__init__")
     def test_set_flavor_0(self, mock_init):
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
         c.conn = MagicMock()
         c.conn.create_flavor = MagicMock()
         c.conn.create_flavor.return_value = Munch({"id": "49186969-54a4-470e-ad14-315081685a3d"})
@@ -377,7 +371,7 @@ class TestCloud(unittest.TestCase):
     @mock.patch("openstack_flavor_manager.cloud.Cloud.__init__")
     def test_set_flavor_1(self, mock_init):
         mock_init.return_value = None
-        c = cloud.Cloud()
+        c = cloud.Cloud(cloud="testcloud")
         c.conn = MagicMock()
         c.conn.create_flavor = MagicMock()
         c.conn.create_flavor.return_value = Munch({"id": "49186969-54a4-470e-ad14-315081685a3d"})

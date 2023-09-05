@@ -8,7 +8,7 @@ app = typer.Typer(help="Client to manage OpenStack flavors")
 
 
 @app.command("ensure")
-def ensure(url: str, cloud: str = typer.Option("openstack"),
+def ensure(url: str, cloud: str = typer.Option("openstack", help="Cloud name"),
            recommended: bool = typer.Option(False, help="Additionally install recommended flavors")) -> None:
     flavour_definitions = get_url(url)
     ensure_object = Ensure(cloud=Cloud(cloud), definitions=flavour_definitions, recommended=recommended)

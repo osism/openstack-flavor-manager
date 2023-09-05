@@ -5,7 +5,6 @@
 import logging
 from openstack.compute.v2.flavor import Flavor
 import openstack
-import os
 
 
 def str_to_bool(string_bool: str | bool) -> bool:
