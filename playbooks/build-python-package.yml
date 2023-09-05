@@ -40,7 +40,5 @@
       vars:
         TWINE_USERNAME: "__token__"
         TWINE_REPOSITORY_URL: "pypi.org"
-      secrets:
-        - name: TWINE_PASSWORD
-          secret: "{{ secret.PYPI_API_TOKEN }}"
+        TWINE_PASSWORD: "{{ secret.PYPI_API_TOKEN }}"
       changed_when: false
