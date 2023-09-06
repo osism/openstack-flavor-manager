@@ -39,7 +39,7 @@
         chdir: "{{ zuul_work_dir }}"
       environment:
         TWINE_USERNAME: "__token__"
-        TWINE_REPOSITORY_URL: "pypi.org"
+        TWINE_REPOSITORY_URL: "https://upload.pypi.org/legacy/"
         TWINE_PASSWORD: "{{ secret.PYPI_API_TOKEN }}"
         TWINE_NON_INTERACTIVE: "1"
       changed_when: false
