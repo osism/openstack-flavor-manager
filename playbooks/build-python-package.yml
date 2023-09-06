@@ -37,7 +37,7 @@
       ansible.builtin.command:
         cmd: "/usr/bin/python3 -m twine upload --verbose dist/*"
         chdir: "{{ zuul_work_dir }}"
-      vars:
+      environment:
         TWINE_USERNAME: "__token__"
         TWINE_REPOSITORY_URL: "pypi.org"
         TWINE_PASSWORD: "{{ secret.PYPI_API_TOKEN }}"
