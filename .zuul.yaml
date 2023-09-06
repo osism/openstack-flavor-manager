@@ -17,6 +17,9 @@
 - job:
     name: build-python-package
     run: playbooks/build-python-package.yml
+    secrets:
+      - name: secret
+        secret: SECRET_OPENSTACK_FLAVOR_MANAGER
 
 - project:
     merge-mode: "squash-merge"
@@ -44,7 +47,4 @@
               tox_envlist: test
     tag:
       jobs:
-        - build-python-package:
-            secrets:
-              - name: secret
-                secret: SECRET_OPENSTACK_FLAVOR_MANAGER
+        - build-python-package
