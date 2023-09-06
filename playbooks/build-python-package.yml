@@ -41,4 +41,5 @@
         TWINE_USERNAME: "__token__"
         TWINE_REPOSITORY_URL: "pypi.org"
         TWINE_PASSWORD: "{{ secret.PYPI_API_TOKEN }}"
+        TWINE_NON_INTERACTIVE: "1"
       changed_when: false
