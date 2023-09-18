@@ -15,9 +15,9 @@ reference:
 - field: name
   mandatory_prefix: SCS-
 - field: public
-  default: 'true'
+  default: True
 - field: disabled
-  default: 'false'
+  default: False
 - field: name
 - field: cpus
 - field: ram
