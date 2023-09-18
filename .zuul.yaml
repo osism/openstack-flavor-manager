@@ -21,6 +21,8 @@
       - name: secret
         secret: SECRET_OPENSTACK_FLAVOR_MANAGER
         pass-to-parent: true
+    vars:
+        pypi_twine_executable: "/tmp/venv/bin/python -m twine"
 
 - project:
     merge-mode: "squash-merge"
