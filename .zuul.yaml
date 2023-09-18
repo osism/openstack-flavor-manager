@@ -20,6 +20,7 @@
     secrets:
       - name: secret
         secret: SECRET_OPENSTACK_FLAVOR_MANAGER
+        pass-to-parent: true
 
 - project:
     merge-mode: "squash-merge"
