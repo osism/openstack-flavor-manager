@@ -12,6 +12,12 @@ def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict):
         value = flavor_spec[key_string]
     elif key_string in defaults:
         value = defaults[key_string]
+    # If disc is not present then it is a flavor without disc.
+    elif key_string == "disk":
+        value = 0
+    # By default a flavor should be public
+    elif key_string == "public":
+        value = True
     else:
         raise ValueError(f"Unknown key_string '{key_string}'")
 
@@ -32,8 +38,8 @@ class Cloud:
         )
 
         if flavor_name in self.existing_flavor_names:
-            logger.warning(
-                f"Flavor with name '{flavor_name}' already exists. Skipping."
+            logger.info(
+                f"Flavor '{flavor_name}' already exists."
             )
             return None
 
@@ -45,15 +51,13 @@ class Cloud:
             vcpus=get_spec_or_default(
                 key_string="cpus", flavor_spec=flavor_spec, defaults=defaults
             ),
+
             disk=get_spec_or_default(
                 key_string="disk", flavor_spec=flavor_spec, defaults=defaults
             ),
             ephemeral=0,
             swap=0,
             rxtx_factor=1.0,
-            description=get_spec_or_default(
-                key_string="description", flavor_spec=flavor_spec, defaults=defaults
-            ),
             is_public=get_spec_or_default(
                 key_string="public", flavor_spec=flavor_spec, defaults=defaults
             ),
@@ -86,9 +90,9 @@ class FlavorManager:
                     flavor_spec=required_flavor, defaults=self.defaults_dict
                 )
                 if flavor:
-                    logger.info(f"Flavor created: {required_flavor['name']}")
+                    logger.info(f"Flavor '{required_flavor['name']}' created.")
             except Exception as e:
-                logger.error(f"Flavor could not be created: {required_flavor['name']}")
+                logger.error(f"Flavor '{required_flavor['name']}' could not be created.")
                 logger.error(e)
 
 
@@ -106,7 +110,7 @@ def get_flavor_definitions(name: str) -> dict:
     return yaml.safe_load(result.content)
 
 
-def main(
+def run(
     name: str = typer.Option("scs", "--name", help="Name of flavor definitions."),
     debug: bool = typer.Option(False, "--debug", help="Enable debug logging."),
     cloud: str = typer.Option("admin", "--cloud", help="Cloud name in clouds.yaml."),
@@ -138,5 +142,9 @@ def main(
     manager.run()
 
 
+def main() -> None:
+    typer.run(run)
+
+
 if __name__ == "__main__":
-    typer.run(main)
+    main()
