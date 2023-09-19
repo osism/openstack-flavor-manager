@@ -1,35 +1,142 @@
+from loguru import logger
+from openstack.compute.v2.flavor import Flavor
+import openstack
+import requests
+import sys
 import typer
-import logging
-from openstack_flavor_manager.reference import get_url
-from openstack_flavor_manager.cloud import Cloud
-from openstack_flavor_manager.ensure import Ensure
-
-app = typer.Typer(help="Client to manage OpenStack flavors")
+import yaml
 
 
-@app.command("ensure")
-def ensure(url: str, cloud: str = typer.Option("openstack", help="Cloud name"),
-           recommended: bool = typer.Option(False, help="Additionally install recommended flavors")) -> None:
-    flavour_definitions = get_url(url)
-    ensure_object = Ensure(cloud=Cloud(cloud), definitions=flavour_definitions, recommended=recommended)
-    ensure_object.ensure()
+def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict):
+    if key_string in flavor_spec:
+        value = flavor_spec[key_string]
+    elif key_string in defaults:
+        value = defaults[key_string]
+    else:
+        raise ValueError(f"Unknown key_string '{key_string}'")
+
+    return value
 
 
-# This is needed for:
-# 1) Global app option handling
-# 2) Prevent that the single "ensure" command is automatically ommited
-@app.callback()
-def callback(debug_logging: bool = typer.Option(False, "--debug", help="Enable debug logging")):
-    logging.basicConfig(
-        level=logging.INFO if not debug_logging else logging.DEBUG,
-        format="%(asctime)s - %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
+class Cloud:
+    def __init__(self, cloud: str) -> None:
+        self.conn = openstack.connect(cloud=cloud)
+        self.existing_flavors = self.conn.list_flavors()
+        self.existing_flavor_names = set(
+            flavor.name for flavor in self.existing_flavors
+        )
+
+    def set_flavor(self, flavor_spec: dict, defaults: dict) -> Flavor | None:
+        flavor_name = get_spec_or_default(
+            key_string="name", flavor_spec=flavor_spec, defaults=defaults
+        )
+
+        if flavor_name in self.existing_flavor_names:
+            logger.warning(
+                f"Flavor with name '{flavor_name}' already exists. Skipping."
+            )
+            return None
+
+        flavor = self.conn.create_flavor(
+            name=flavor_name,
+            ram=get_spec_or_default(
+                key_string="ram", flavor_spec=flavor_spec, defaults=defaults
+            ),
+            vcpus=get_spec_or_default(
+                key_string="cpus", flavor_spec=flavor_spec, defaults=defaults
+            ),
+            disk=get_spec_or_default(
+                key_string="disk", flavor_spec=flavor_spec, defaults=defaults
+            ),
+            ephemeral=0,
+            swap=0,
+            rxtx_factor=1.0,
+            description=get_spec_or_default(
+                key_string="description", flavor_spec=flavor_spec, defaults=defaults
+            ),
+            is_public=get_spec_or_default(
+                key_string="public", flavor_spec=flavor_spec, defaults=defaults
+            ),
+        )
+        self.conn.set_flavor_specs(
+            flavor_id=flavor.id,
+            extra_specs={},
+        )
+        return flavor
+
+
+class FlavorManager:
+    def __init__(
+        self, cloud: Cloud, definitions: dict, recommended: bool = False
+    ) -> None:
+        self.required_flavors = definitions["mandatory"]
+        self.cloud = cloud
+        if recommended:
+            self.required_flavors = self.required_flavors + definitions["recommended"]
+
+        self.defaults_dict = {}
+        for item in definitions["reference"]:
+            if "default" in item:
+                self.defaults_dict[item["field"]] = item["default"]
+
+    def run(self) -> None:
+        for required_flavor in self.required_flavors:
+            try:
+                flavor = self.cloud.set_flavor(
+                    flavor_spec=required_flavor, defaults=self.defaults_dict
+                )
+                if flavor:
+                    logger.info(f"Flavor created: {required_flavor['name']}")
+            except Exception as e:
+                logger.error(f"Flavor could not be created: {required_flavor['name']}")
+                logger.error(e)
+
+
+def get_flavor_definitions(name: str) -> dict:
+    if name == "scs":
+        url = "https://raw.githubusercontent.com/SovereignCloudStack/standards/main/Tests/iaas/SCS-Spec.MandatoryFlavors.verbose.yaml"  # noqa: E501
+    elif name == "osism":
+        url = "https://raw.githubusercontent.com/osism/openstack-flavor-manager/main/flavors.yaml"
+
+    logger.debug(f"Loading flavor definitions from {url}")
+
+    result = requests.get(url)
+    result.raise_for_status()
+
+    return yaml.safe_load(result.content)
+
+
+def main(
+    name: str = typer.Option("scs", "--name", help="Name of flavor definitions."),
+    debug: bool = typer.Option(False, "--debug", help="Enable debug logging."),
+    cloud: str = typer.Option("admin", "--cloud", help="Cloud name in clouds.yaml."),
+    recommended: bool = typer.Option(
+        False, "--recommended", help="Create recommended flavors."
+    ),
+) -> None:
+
+    if debug:
+        level = "DEBUG"
+        log_fmt = (
+            "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | "
+            "<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>"
+        )
+    else:
+        level = "INFO"
+        log_fmt = (
+            "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | "
+            "<level>{message}</level>"
+        )
+
+    logger.remove()
+    logger.add(sys.stderr, format=log_fmt, level=level, colorize=True)
+
+    definitions = get_flavor_definitions(name)
+    manager = FlavorManager(
+        cloud=Cloud(cloud), definitions=definitions, recommended=recommended
     )
-
-
-def main():
-    app()
+    manager.run()
 
 
 if __name__ == "__main__":
-    main()
+    typer.run(main)

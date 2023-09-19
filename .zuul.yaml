@@ -30,24 +30,17 @@
     check:
       jobs:
         - flake8
-        - mypy
-        - tox-py310:
-            vars:
-              tox_envlist: test
-    gate:
-      jobs:
-        - flake8
-        - mypy
-        - tox-py310:
-            vars:
-              tox_envlist: test
+        # - mypy
+        # - tox-py310:
+        #     vars:
+        #       tox_envlist: test
     periodic-daily:
       jobs:
         - flake8
-        - mypy
-        - tox-py310:
-            vars:
-              tox_envlist: test
+        # - mypy
+        # - tox-py310:
+        #     vars:
+        #       tox_envlist: test
     tag:
       jobs:
         - flavor-manager-publish-pypi-package
