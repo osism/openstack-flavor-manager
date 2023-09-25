@@ -11,26 +11,24 @@ Documentation: <https://docs.scs.community/docs/category/openstack-flavor-manage
 ## Usage
 
 ```sh
-python -m openstack_flavor_manager.main --help
+python -m openstack_flavor_manager.main  [OPTIONS]
+
+--name               TEXT  Name of flavor definitions. [default: scs] \
+--debug                    Enable debug logging.\
+--cloud              TEXT  Cloud name in clouds.yaml. [default: admin]\
+--recommended              Create recommended flavors.\
+--help                     Show this message and exit.
 ```
 
 E.g. if you want to create flavors, which belong to the SCS standard, use:
 
-```py
-python -m openstack_flavor_manager.main ensure scs
+```sh
+openstack_flavor_manager --name=scs
 ```
 
 By default, only the ``mandatory`` flavors are created. If you also want to create the
 recommended flavors use ``--recommended`` as in:
 
-```py
-python -m openstack_flavor_manager.main ensure --recommended scs
+```sh
+openstack_flavor_manager --recommended --name=scs
 ```
-
-If you want to create flavors from your own yaml file, provide a link to this file:
-
-```py
-python -m openstack_flavor_manager.main ensure https://my-server.com/my-file.yaml
-```
-
-Predefined URL shortcuts are ``scs`` and ``osism``
