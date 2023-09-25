@@ -97,10 +97,13 @@ class FlavorManager:
 
 
 def get_flavor_definitions(name: str) -> dict:
+    url = None
     if name == "scs":
         url = "https://raw.githubusercontent.com/SovereignCloudStack/standards/main/Tests/iaas/SCS-Spec.MandatoryFlavors.verbose.yaml"  # noqa: E501
     elif name == "osism":
         url = "https://raw.githubusercontent.com/osism/openstack-flavor-manager/main/flavors.yaml"
+    else:
+        raise ValueError(f"Unsupported name: {name}")
 
     logger.debug(f"Loading flavor definitions from {url}")
 
