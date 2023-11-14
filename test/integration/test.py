@@ -145,7 +145,6 @@ recommended:
 
 
 class TestIntegrationEnsure(unittest.TestCase):
-
     def setUp(self):
         self.runner = CliRunner()
 
@@ -155,7 +154,7 @@ class TestIntegrationEnsure(unittest.TestCase):
         mock_existing_flavors = [
             Munch({"name": "SCS-4V-16"}),
             Munch({"name": "SCS-2V-16"}),
-            Munch({"name": "SCS-8V-32"})
+            Munch({"name": "SCS-8V-32"}),
         ]
         mock_conn.return_value.list_flavors.return_value = mock_existing_flavors
         mock_createflavor = MagicMock()
@@ -172,13 +171,17 @@ class TestIntegrationEnsure(unittest.TestCase):
         self.assertEqual(mock_request.call_count, 1)
 
         expected_result = yaml.safe_load(FLAVOR_YML)
-        expected_creation_count = len(expected_result["mandatory"]) - len(mock_existing_flavors)
+        expected_creation_count = len(expected_result["mandatory"]) - len(
+            mock_existing_flavors
+        )
 
         self.assertEqual(mock_createflavor.call_count, expected_creation_count)
         self.assertEqual(mock_setflavorspecs.call_count, expected_creation_count)
 
         for i in range(expected_creation_count):
-            mock_setflavorspecs.assert_any_call(flavor_id=UUID_LIST[i].id, extra_specs={})
+            mock_setflavorspecs.assert_any_call(
+                flavor_id=UUID_LIST[i].id, extra_specs={}
+            )
 
     @mock.patch("requests.get")
     @mock.patch("openstack_flavor_manager.main.openstack.connect")
@@ -186,7 +189,7 @@ class TestIntegrationEnsure(unittest.TestCase):
         mock_existing_flavors = [
             Munch({"name": "SCS-4V-16"}),
             Munch({"name": "SCS-2V-16"}),
-            Munch({"name": "SCS-8V-32"})
+            Munch({"name": "SCS-8V-32"}),
         ]
         mock_conn.return_value.list_flavors.return_value = mock_existing_flavors
         mock_createflavor = MagicMock()
@@ -203,12 +206,16 @@ class TestIntegrationEnsure(unittest.TestCase):
         self.assertEqual(mock_request.call_count, 1)
 
         expected_result = yaml.safe_load(FLAVOR_YML)
-        expected_creation_count = (len(expected_result["mandatory"])
-                                   + len(expected_result["recommended"])
-                                   - len(mock_existing_flavors))
+        expected_creation_count = (
+            len(expected_result["mandatory"])
+            + len(expected_result["recommended"])
+            - len(mock_existing_flavors)
+        )
 
         self.assertEqual(mock_createflavor.call_count, expected_creation_count)
         self.assertEqual(mock_setflavorspecs.call_count, expected_creation_count)
 
         for i in range(expected_creation_count):
-            mock_setflavorspecs.assert_any_call(flavor_id=UUID_LIST[i].id, extra_specs={})
+            mock_setflavorspecs.assert_any_call(
+                flavor_id=UUID_LIST[i].id, extra_specs={}
+            )

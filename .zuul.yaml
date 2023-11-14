@@ -31,6 +31,7 @@
       jobs:
         - flake8
         - mypy
+        - python-black
         - tox-py310:
              vars:
                tox_envlist: test
@@ -38,6 +39,7 @@
       jobs:
         - flake8
         - mypy
+        - python-black
         - tox-py310:
              vars:
                tox_envlist: test
