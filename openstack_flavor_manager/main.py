@@ -38,9 +38,7 @@ class Cloud:
         )
 
         if flavor_name in self.existing_flavor_names:
-            logger.info(
-                f"Flavor '{flavor_name}' already exists."
-            )
+            logger.info(f"Flavor '{flavor_name}' already exists.")
             return None
 
         flavor = self.conn.create_flavor(
@@ -51,7 +49,6 @@ class Cloud:
             vcpus=get_spec_or_default(
                 key_string="cpus", flavor_spec=flavor_spec, defaults=defaults
             ),
-
             disk=get_spec_or_default(
                 key_string="disk", flavor_spec=flavor_spec, defaults=defaults
             ),
@@ -92,7 +89,9 @@ class FlavorManager:
                 if flavor:
                     logger.info(f"Flavor '{required_flavor['name']}' created.")
             except Exception as e:
-                logger.error(f"Flavor '{required_flavor['name']}' could not be created.")
+                logger.error(
+                    f"Flavor '{required_flavor['name']}' could not be created."
+                )
                 logger.error(e)
 
 
@@ -121,7 +120,6 @@ def run(
         False, "--recommended", help="Create recommended flavors."
     ),
 ) -> None:
-
     if debug:
         level = "DEBUG"
         log_fmt = (

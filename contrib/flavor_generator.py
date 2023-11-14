@@ -9,39 +9,39 @@ with open("./rules.yaml", "r") as stream:
         print(exc)
 
 # prefixes
-prefixes = rules['prefixes']
+prefixes = rules["prefixes"]
 # cpus
 cpus = []
-cpu_counts = rules['cpu_counts']
-cpu_suffixes = rules['cpu_suffixes']
-cpu_securities = rules['cpu_securities']
+cpu_counts = rules["cpu_counts"]
+cpu_suffixes = rules["cpu_suffixes"]
+cpu_securities = rules["cpu_securities"]
 # rams
 rams = []
-ram_counts = rules['ram_counts']
-ram_suffixes = rules['ram_suffixes']
+ram_counts = rules["ram_counts"]
+ram_suffixes = rules["ram_suffixes"]
 # disks (optional)
 disks = [""]  # allow empty
-disk_suffixes = rules['disk_suffixes']
-disk_amounts = rules['disk_amounts']
-disk_sizes = rules['disk_sizes']
+disk_suffixes = rules["disk_suffixes"]
+disk_amounts = rules["disk_amounts"]
+disk_sizes = rules["disk_sizes"]
 # virtualizations (optional)
 virtualizations = [""]  # allow empty
-hypervisors = rules['hypervisors']
-nesteds = rules['nesteds']
+hypervisors = rules["hypervisors"]
+nesteds = rules["nesteds"]
 # archs (optional)
 archs = [""]  # allow empty
-arch_vendors = rules['arch_vendors']
-arch_generations = rules['arch_generations']
-arch_frequencies = rules['arch_frequencies']
+arch_vendors = rules["arch_vendors"]
+arch_generations = rules["arch_generations"]
+arch_frequencies = rules["arch_frequencies"]
 # gpus (optional)
 gpus = [""]  # allow empty
-gpu_modes = rules['gpu_modes']
-gpu_models = rules['gpu_models']
-gpu_hbms = rules['gpu_hbms']
+gpu_modes = rules["gpu_modes"]
+gpu_models = rules["gpu_models"]
+gpu_hbms = rules["gpu_hbms"]
 
 # special (optional) - all combinations possible
 specials = [""]  # allow empty
-special_list = rules['specials']
+special_list = rules["specials"]
 
 
 #########################################
@@ -149,17 +149,23 @@ for gpu_mode in gpu_modes:
 for gpu_mode in gpu_modes:
     for gpu_model in gpu_models:
         for gpu_generation in gpu_model["generations"]:
-            for compute_units in gpu_generation['compute_units']:
-                gpus.append(f"-{gpu_mode}{gpu_model['name']}{gpu_generation['name']}{compute_units}")
+            for compute_units in gpu_generation["compute_units"]:
+                gpus.append(
+                    f"-{gpu_mode}{gpu_model['name']}{gpu_generation['name']}{compute_units}"
+                )
                 gpus.append(f"-{gpu_mode}{gpu_model['name']}{compute_units}")
 # add gpu_modes with gpu_models, comupte units and hbm. generate also entries with the gpu_generation
 for gpu_mode in gpu_modes:
     for gpu_model in gpu_models:
         for gpu_generation in gpu_model["generations"]:
-            for compute_units in gpu_generation['compute_units']:
+            for compute_units in gpu_generation["compute_units"]:
                 for gpu_hbm in gpu_hbms:
-                    gpus.append(f"-{gpu_mode}{gpu_model['name']}{gpu_generation['name']}{compute_units}{gpu_hbm}")
-                    gpus.append(f"-{gpu_mode}{gpu_model['name']}{compute_units}{gpu_hbm}")
+                    gpus.append(
+                        f"-{gpu_mode}{gpu_model['name']}{gpu_generation['name']}{compute_units}{gpu_hbm}"
+                    )
+                    gpus.append(
+                        f"-{gpu_mode}{gpu_model['name']}{compute_units}{gpu_hbm}"
+                    )
 
 #########################################
 # build specials
@@ -183,4 +189,6 @@ for prefix in prefixes:
                     for arch in archs:
                         for gpu in gpus:
                             for special in specials:
-                                print(f"{prefix}{cpu}{ram}{disk}{virtualization}{arch}{gpu}{special}")
+                                print(
+                                    f"{prefix}{cpu}{ram}{disk}{virtualization}{arch}{gpu}{special}"
+                                )
