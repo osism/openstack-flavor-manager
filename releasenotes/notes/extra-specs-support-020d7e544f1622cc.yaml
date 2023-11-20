@@ -1,0 +1,5 @@
+---
+prelude: >
+    Add support for setting extra_specs, as well as setting the flavor id.
+features:
+  - Add support for setting extra_specs, as well as setting the flavor id.
