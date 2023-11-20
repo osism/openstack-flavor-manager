@@ -18,6 +18,9 @@ def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict):
     # By default a flavor should be public
     elif key_string == "public":
         value = True
+    # If no flavorid is given, automatically assign one (OpenStack SDK feature)
+    elif key_string == "flavorid":
+        value = "auto"
     else:
         raise ValueError(f"Unknown key_string '{key_string}'")
 
@@ -58,10 +61,21 @@ class Cloud:
             is_public=get_spec_or_default(
                 key_string="public", flavor_spec=flavor_spec, defaults=defaults
             ),
+            flavorid=get_spec_or_default(
+                key_string="flavorid", flavor_spec=flavor_spec, defaults=defaults
+            ),
         )
+        extra_specs = {
+            key: value
+            for key, value in flavor_spec.items()
+            # we could exclude keys explicitly, like so:
+            # if key not in ('name', 'ram', 'cpus', 'disk', 'public', 'disabled')
+            # but the extra specs should be prefixed, so we can as well do it like so:
+            if ":" in key
+        }
         self.conn.set_flavor_specs(
             flavor_id=flavor.id,
-            extra_specs={},
+            extra_specs=extra_specs,
         )
         return flavor
 

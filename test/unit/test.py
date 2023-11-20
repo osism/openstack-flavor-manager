@@ -372,7 +372,8 @@ class TestCloud(unittest.TestCase):
         )
         c.existing_flavor_names = set()
         flavor = c.set_flavor(
-            {"name": "SCS-1V-4", "cpus": 1, "ram": 4096, "disk": 0}, {"public": True}
+            {"name": "SCS-1V-4", "cpus": 1, "ram": 4096, "disk": 0, "t:foo": "bar"},
+            {"public": True},
         )
         c.conn.create_flavor.assert_called_with(
             name="SCS-1V-4",
@@ -383,9 +384,11 @@ class TestCloud(unittest.TestCase):
             swap=0,
             rxtx_factor=1.0,
             is_public=True,
+            flavorid="auto",
         )
         c.conn.set_flavor_specs.assert_called_with(
-            flavor_id="49186969-54a4-470e-ad14-315081685a3d", extra_specs={}
+            flavor_id="49186969-54a4-470e-ad14-315081685a3d",
+            extra_specs={"t:foo": "bar"},
         )
 
         # Check that the flavor was created successfully
