@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Add `scs:cpu-type` to all flavors.
