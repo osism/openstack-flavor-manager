@@ -32,7 +32,7 @@
         - flake8
         - mypy
         - python-black
-        - tox-py310:
+        - tox:
              vars:
                tox_envlist: test
     periodic-daily:
@@ -40,7 +40,7 @@
         - flake8
         - mypy
         - python-black
-        - tox-py310:
+        - tox:
              vars:
                tox_envlist: test
     tag:
