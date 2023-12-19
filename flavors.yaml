@@ -16,6 +16,7 @@ mandatory:
     ram: 1024
     disk: 0
     scs:cpu-type: crowded-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1L-1-5
@@ -23,6 +24,7 @@ mandatory:
     ram: 1024
     disk: 5
     scs:cpu-type: crowded-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1V-2
@@ -30,6 +32,7 @@ mandatory:
     ram: 2048
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1V-2-5
@@ -37,6 +40,7 @@ mandatory:
     ram: 2048
     disk: 5
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1V-4
@@ -44,6 +48,7 @@ mandatory:
     ram: 4096
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1V-4-10
@@ -51,6 +56,7 @@ mandatory:
     ram: 4096
     disk: 10
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1V-8
@@ -58,6 +64,7 @@ mandatory:
     ram: 8192
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-1V-8-20
@@ -65,6 +72,7 @@ mandatory:
     ram: 8192
     disk: 20
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-4
@@ -72,6 +80,7 @@ mandatory:
     ram: 4096
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-4-10
@@ -79,6 +88,7 @@ mandatory:
     ram: 4096
     disk: 10
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-8
@@ -86,6 +96,7 @@ mandatory:
     ram: 8192
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-8-20
@@ -93,6 +104,7 @@ mandatory:
     ram: 8192
     disk: 20
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-16
@@ -100,6 +112,7 @@ mandatory:
     ram: 16384
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-16-50
@@ -107,6 +120,7 @@ mandatory:
     ram: 16384
     disk: 50
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-4V-8
@@ -114,6 +128,7 @@ mandatory:
     ram: 8192
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-4V-8-20
@@ -121,6 +136,7 @@ mandatory:
     ram: 8192
     disk: 20
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-4V-16
@@ -128,6 +144,7 @@ mandatory:
     ram: 16384
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-4V-16-50
@@ -135,6 +152,7 @@ mandatory:
     ram: 16384
     disk: 50
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-4V-32
@@ -142,6 +160,7 @@ mandatory:
     ram: 32768
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-4V-32-100
@@ -149,6 +168,7 @@ mandatory:
     ram: 32768
     disk: 100
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-8V-16
@@ -156,6 +176,7 @@ mandatory:
     ram: 16384
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-8V-16-50
@@ -163,6 +184,7 @@ mandatory:
     ram: 16384
     disk: 50
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-8V-32
@@ -170,6 +192,7 @@ mandatory:
     ram: 32768
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-8V-32-100
@@ -177,6 +200,7 @@ mandatory:
     ram: 32768
     disk: 100
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-16V-32
@@ -184,6 +208,7 @@ mandatory:
     ram: 32768
     disk: 0
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-16V-32-100
@@ -191,6 +216,7 @@ mandatory:
     ram: 32768
     disk: 100
     scs:cpu-type: shared-core
+    scs:disk0-type: network
     local_storage: "false"
     hw_rng:allowed: "true"
   - name: SCS-2V-4-20s
@@ -198,6 +224,7 @@ mandatory:
     ram: 4096
     disk: 20
     scs:cpu-type: shared-core
+    scs:disk0-type: ssd
     local_storage: "true"
     hw_rng:allowed: "true"
   - name: SCS-4V-8-50s
@@ -205,6 +232,7 @@ mandatory:
     ram: 8192
     disk: 50
     scs:cpu-type: shared-core
+    scs:disk0-type: ssd
     local_storage: "true"
     hw_rng:allowed: "true"
   - name: SCS-8V-32-100s
@@ -212,5 +240,6 @@ mandatory:
     ram: 32768
     disk: 100
     scs:cpu-type: shared-core
+    scs:disk0-type: ssd
     local_storage: "true"
     hw_rng:allowed: "true"
