@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0
+
 from loguru import logger
 from openstack.compute.v2.flavor import Flavor
 import openstack
