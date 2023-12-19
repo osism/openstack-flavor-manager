@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add extra spec `hw_rng:allowed: True` to all flavors.
+    https://docs.scs.community/standards/scs-0101-v1-entropy
