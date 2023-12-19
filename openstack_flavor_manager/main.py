@@ -32,41 +32,42 @@ def get_spec_or_default(key_string: str, flavor_spec: dict, defaults: dict):
 class Cloud:
     def __init__(self, cloud: str) -> None:
         self.conn = openstack.connect(cloud=cloud)
-        self.existing_flavors = self.conn.list_flavors()
-        self.existing_flavor_names = set(
-            flavor.name for flavor in self.existing_flavors
-        )
+        flavors = self.conn.list_flavors()
+        self.existing_flavors = {}
+        for flavor in flavors:
+            self.existing_flavors[flavor.name] = flavor
 
     def set_flavor(self, flavor_spec: dict, defaults: dict) -> Flavor | None:
         flavor_name = get_spec_or_default(
             key_string="name", flavor_spec=flavor_spec, defaults=defaults
         )
 
-        if flavor_name in self.existing_flavor_names:
-            logger.info(f"Flavor '{flavor_name}' already exists.")
-            return None
+        if flavor_name not in self.existing_flavors:
+            flavor = self.conn.create_flavor(
+                name=flavor_name,
+                ram=get_spec_or_default(
+                    key_string="ram", flavor_spec=flavor_spec, defaults=defaults
+                ),
+                vcpus=get_spec_or_default(
+                    key_string="cpus", flavor_spec=flavor_spec, defaults=defaults
+                ),
+                disk=get_spec_or_default(
+                    key_string="disk", flavor_spec=flavor_spec, defaults=defaults
+                ),
+                ephemeral=0,
+                swap=0,
+                rxtx_factor=1.0,
+                is_public=get_spec_or_default(
+                    key_string="public", flavor_spec=flavor_spec, defaults=defaults
+                ),
+                flavorid=get_spec_or_default(
+                    key_string="flavorid", flavor_spec=flavor_spec, defaults=defaults
+                ),
+            )
+            logger.info(f"Flavor {flavor_name} created")
+        else:
+            flavor = self.existing_flavors[flavor_name]
 
-        flavor = self.conn.create_flavor(
-            name=flavor_name,
-            ram=get_spec_or_default(
-                key_string="ram", flavor_spec=flavor_spec, defaults=defaults
-            ),
-            vcpus=get_spec_or_default(
-                key_string="cpus", flavor_spec=flavor_spec, defaults=defaults
-            ),
-            disk=get_spec_or_default(
-                key_string="disk", flavor_spec=flavor_spec, defaults=defaults
-            ),
-            ephemeral=0,
-            swap=0,
-            rxtx_factor=1.0,
-            is_public=get_spec_or_default(
-                key_string="public", flavor_spec=flavor_spec, defaults=defaults
-            ),
-            flavorid=get_spec_or_default(
-                key_string="flavorid", flavor_spec=flavor_spec, defaults=defaults
-            ),
-        )
         extra_specs = {
             key: value
             for key, value in flavor_spec.items()
@@ -99,15 +100,11 @@ class FlavorManager:
     def run(self) -> None:
         for required_flavor in self.required_flavors:
             try:
-                flavor = self.cloud.set_flavor(
+                self.cloud.set_flavor(
                     flavor_spec=required_flavor, defaults=self.defaults_dict
                 )
-                if flavor:
-                    logger.info(f"Flavor '{required_flavor['name']}' created.")
             except Exception as e:
-                logger.error(
-                    f"Flavor '{required_flavor['name']}' could not be created."
-                )
+                logger.error(f"Flavor {required_flavor['name']} could not be created")
                 logger.error(e)
 
 
