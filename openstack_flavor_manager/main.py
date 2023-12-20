@@ -74,7 +74,7 @@ class Cloud:
             # we could exclude keys explicitly, like so:
             # if key not in ('name', 'ram', 'cpus', 'disk', 'public', 'disabled')
             # but the extra specs should be prefixed, so we can as well do it like so:
-            if ":" in key or key in ["local_storage"]
+            if ":" in key
         }
         self.conn.set_flavor_specs(
             flavor_id=flavor.id,
