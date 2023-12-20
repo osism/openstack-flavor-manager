@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Remove `local_storage` extra spec in favor of `scs:disk0-type` extra spec.
