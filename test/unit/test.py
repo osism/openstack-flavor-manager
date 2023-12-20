@@ -358,7 +358,12 @@ class TestCloud(unittest.TestCase):
         mock_connect.assert_called_with(cloud="testcloud")
         self.assertEqual(mock_flavors.call_count, 1)
         self.assertEqual(
-            c.existing_flavor_names, {"SCS-8V-32", "SCS-2V-16", "SCS-4V-16"}
+            c.existing_flavors,
+            {
+                "SCS-8V-32": Munch({"name": "SCS-8V-32"}),
+                "SCS-2V-16": Munch({"name": "SCS-2V-16"}),
+                "SCS-4V-16": Munch({"name": "SCS-4V-16"}),
+            },
         )
 
     @patch("openstack_flavor_manager.main.Cloud.__init__")
@@ -370,7 +375,7 @@ class TestCloud(unittest.TestCase):
         c.conn.create_flavor.return_value = Munch(
             {"id": "49186969-54a4-470e-ad14-315081685a3d"}
         )
-        c.existing_flavor_names = set()
+        c.existing_flavors = dict()
         flavor = c.set_flavor(
             {"name": "SCS-1V-4", "cpus": 1, "ram": 4096, "disk": 0, "t:foo": "bar"},
             {"public": True},
@@ -401,17 +406,26 @@ class TestCloud(unittest.TestCase):
         c.conn = MagicMock()
         c.conn.create_flavor = MagicMock()
         c.conn.create_flavor.return_value = Munch(
-            {"id": "49186969-54a4-470e-ad14-315081685a3d"}
+            {"id": "49186969-54a4-470e-ad14-315081685a3d", "name": "SCS-1V-4"}
         )
-        c.existing_flavor_names = {"SCS-1V-4"}
+        existing_flavor = Munch(
+            {"id": "49186969-54a4-470e-ad14-315081685a3d", "name": "SCS-1V-4"}
+        )
+        c.existing_flavors = {"SCS-1V-4": existing_flavor}
         flavor = c.set_flavor(
-            {"name": "SCS-1V-4", "cpus": 1, "ram": 4096, "disk": 0}, {"public": True}
+            {"name": "SCS-1V-4", "cpus": 1, "ram": 4096, "disk": 0, "t:foo": "bar"},
+            {"public": True},
         )
         c.conn.create_flavor.assert_not_called()
-        c.conn.set_flavor_specs.assert_not_called()
 
-        # Check that no flavor has been returned, because it already exists
-        self.assertEqual(flavor, None)
+        # Check that extra specs are being updated
+        c.conn.set_flavor_specs.assert_called_with(
+            flavor_id="49186969-54a4-470e-ad14-315081685a3d",
+            extra_specs={"t:foo": "bar"},
+        )
+
+        # Check that the existing flavor is returned
+        self.assertIs(flavor, existing_flavor)
 
 
 if __name__ == "__main__":
