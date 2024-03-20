@@ -6,6 +6,7 @@ import openstack
 import requests
 import sys
 import typer
+import typing
 import yaml
 
 
@@ -37,7 +38,9 @@ class Cloud:
         for flavor in flavors:
             self.existing_flavors[flavor.name] = flavor
 
-    def set_flavor(self, flavor_spec: dict, defaults: dict) -> Flavor | None:
+    def set_flavor(
+        self, flavor_spec: dict, defaults: dict
+    ) -> typing.Union[Flavor, None]:
         flavor_name = get_spec_or_default(
             key_string="name", flavor_spec=flavor_spec, defaults=defaults
         )
