@@ -8,7 +8,7 @@ PyYAML = "==6.0.1"
 loguru = "==0.7.2"
 openstacksdk = "==3.0.0"
 requests = "==2.31.0"
-typer = {version = "==0.12.1", extras = ["all"]}
+typer = {version = "==0.12.2", extras = ["all"]}
 
 [dev-packages]
 munch = "==4.0.0"
