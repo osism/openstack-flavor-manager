@@ -7,3 +7,5 @@
 
   roles:
     - role: tox
+      vars:
+        tox_extra_args: -- --cloud openstack --debug
