@@ -1,0 +1,22 @@
+---
+- name: Pre integration test play
+  hosts: all
+
+  vars:
+    zuul_work_dir: "{{ zuul.project.src_dir }}"
+
+  roles:
+    - role: ensure-tox
+    - role: devstack
+      vars:
+        devstack_services: "keystone g-api nova n-api n-cpu n-cond n-sch n-novnc n-api-meta rabbit placement-api placement-client"
+
+  tasks:
+    - name: Copy clouds.yml configuration file
+      ansible.builtin.copy:
+        src: "{{ zuul_work_dir }}/.clouds.yml"
+        dest: "{{ zuul_work_dir }}/clouds.yml"
+        remote_src: true
+        mode: '0644'
+        owner: zuul
+        group: zuul
