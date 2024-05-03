@@ -4,6 +4,7 @@ from loguru import logger
 from openstack.compute.v2.flavor import Flavor
 import openstack
 import requests
+from requests_file import FileAdapter
 import sys
 import typer
 import typing
@@ -113,16 +114,31 @@ class FlavorManager:
 
 def get_flavor_definitions(name: str) -> dict:
     url = None
+    source = None
+
+    s = requests.Session()
+
     if name == "scs":
+        source = "url"
         url = "https://raw.githubusercontent.com/SovereignCloudStack/standards/main/Tests/iaas/SCS-Spec.MandatoryFlavors.verbose.yaml"  # noqa: E501
     elif name == "osism":
+        source = "url"
         url = "https://raw.githubusercontent.com/osism/openstack-flavor-manager/main/flavors.yaml"
+    elif name == "local":
+        source = "local"
+        url = "file:///data/SCS-Spec.MandatoryFlavors.verbose.yaml"
     else:
         raise ValueError(f"Unsupported name: {name}")
 
-    logger.debug(f"Loading flavor definitions from {url}")
+    if source == "local":
+        logger.debug(f"Loading flavor definitions from local file {url}")
+    elif source == "url":
+        logger.debug(f"Loading flavor definitions from URL {url}")
+        s.mount("file://", FileAdapter())
+    else:
+        raise ValueError(f"Unsupported source: {source}")
 
-    result = requests.get(url)
+    result = s.get(url)
     result.raise_for_status()
 
     return yaml.safe_load(result.content)
