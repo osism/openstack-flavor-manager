@@ -1,5 +1,0 @@
----
-features:
-  - |
-    Add flavors with local storage and add `local_storage` extra spec
-    to all flavors.
