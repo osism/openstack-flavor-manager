@@ -132,9 +132,9 @@ def get_flavor_definitions(name: str) -> dict:
 
     if source == "local":
         logger.debug(f"Loading flavor definitions from local file {url}")
+        s.mount("file://", FileAdapter())
     elif source == "url":
         logger.debug(f"Loading flavor definitions from URL {url}")
-        s.mount("file://", FileAdapter())
     else:
         raise ValueError(f"Unsupported source: {source}")
 
