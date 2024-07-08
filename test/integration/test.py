@@ -148,7 +148,7 @@ class TestIntegrationEnsure(unittest.TestCase):
     def setUp(self):
         self.runner = CliRunner()
 
-    @mock.patch("requests.get")
+    @mock.patch("requests.Session.get")
     @mock.patch("openstack_flavor_manager.main.openstack.connect")
     def test_ensure_0(self, mock_conn, mock_request):
         mock_existing_flavors = [
@@ -183,7 +183,7 @@ class TestIntegrationEnsure(unittest.TestCase):
                 flavor_id=UUID_LIST[i].id, extra_specs={}
             )
 
-    @mock.patch("requests.get")
+    @mock.patch("requests.Session.get")
     @mock.patch("openstack_flavor_manager.main.openstack.connect")
     def test_ensure_1(self, mock_conn, mock_request):
         mock_existing_flavors = [

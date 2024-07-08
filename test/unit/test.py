@@ -7,6 +7,8 @@ from requests import HTTPError
 from yaml.parser import ParserError
 from munch import Munch
 from typer.testing import CliRunner
+from io import BytesIO
+
 
 from openstack_flavor_manager.main import (
     run,
@@ -125,7 +127,7 @@ class TestCLIArguments(unittest.TestCase):
 
 
 class TestGetFlavorDefinitions(unittest.TestCase):
-    @patch("requests.get")
+    @patch("requests.Session.get")
     def test_get_flavor_definitions_0(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.content = MOCK_YML
@@ -136,7 +138,7 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         # Check if get_flavor_definitions returns the expected dict
         self.assertEqual(result, expected_result)
 
-    @patch("requests.get")
+    @patch("requests.Session.get")
     def test_get_flavor_definitions_1(self, mock_get):
         mock_get.return_value.status_code = 404
         mock_get.return_value.content = "Test 123"
@@ -145,7 +147,7 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         # Check if the function raises an exception
         self.assertRaises(HTTPError, get_flavor_definitions, "scs")
 
-    @patch("requests.get")
+    @patch("requests.Session.get")
     def test_get_flavor_definitions_2(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.content = "-" + MOCK_YML
@@ -164,6 +166,20 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         # Resolve 'osism' to correct url
         result = get_flavor_definitions("osism")
         self.assertIs(type(result), dict)
+
+    @patch("io.open")
+    def test_get_flavor_definitions_4(self, mock_open):
+        # Test the "local" option by mocking file reads in requests-file
+
+        mock_open.return_value = BytesIO(bytes(MOCK_YML, encoding="utf-8"))
+        mock_open.return_value.fileno = MagicMock()
+
+        result = get_flavor_definitions("local")
+
+        expected_result = yaml.safe_load(MOCK_YML)
+
+        # Check if get_flavor_definitions returns the expected dict
+        self.assertEqual(result, expected_result)
 
 
 class TestFlavorManager(unittest.TestCase):
