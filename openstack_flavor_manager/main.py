@@ -112,31 +112,33 @@ class FlavorManager:
                 logger.error(e)
 
 
-def get_flavor_definitions(name: str) -> dict:
-    url = None
-    source = None
-
+def get_flavor_definitions(source: str, url: str) -> dict:
     s = requests.Session()
 
-    if name == "scs":
-        source = "url"
+    if source == "scs":
+        source_type = "url"
         url = "https://raw.githubusercontent.com/SovereignCloudStack/standards/main/Tests/iaas/SCS-Spec.MandatoryFlavors.verbose.yaml"  # noqa: E501
-    elif name == "osism":
-        source = "url"
+    elif source == "osism":
+        source_type = "url"
         url = "https://raw.githubusercontent.com/osism/openstack-flavor-manager/main/flavors.yaml"
-    elif name == "local":
-        source = "local"
-        url = "file:///data/SCS-Spec.MandatoryFlavors.verbose.yaml"
-    else:
-        raise ValueError(f"Unsupported name: {name}")
-
-    if source == "local":
-        logger.debug(f"Loading flavor definitions from local file {url}")
-        s.mount("file://", FileAdapter())
+    elif source == "local":
+        source_type = "local"
+        if not url:
+            url = "file:///data/flavors.yaml"
     elif source == "url":
-        logger.debug(f"Loading flavor definitions from URL {url}")
+        source_type = "url"
+        if not url:
+            raise ValueError(f"No URL specified for source {source}")
     else:
         raise ValueError(f"Unsupported source: {source}")
+
+    if source_type == "local":
+        logger.debug(f"Loading flavor definitions from local file {url}")
+        s.mount("file://", FileAdapter())
+    elif source_type == "url":
+        logger.debug(f"Loading flavor definitions from URL {url}")
+    else:
+        raise ValueError(f"Unsupported source type: {source_type}")
 
     result = s.get(url)
     result.raise_for_status()
@@ -145,7 +147,12 @@ def get_flavor_definitions(name: str) -> dict:
 
 
 def run(
-    name: str = typer.Option("scs", "--name", help="Name of flavor definitions."),
+    name: str = typer.Option("scs", "--name", help="Source of flavor definitions."),
+    url: str = typer.Option(
+        None,
+        "--url",
+        help="Overwrite the default URL where the flavor definitions are available.",
+    ),
     debug: bool = typer.Option(False, "--debug", help="Enable debug logging."),
     cloud: str = typer.Option("admin", "--cloud", help="Cloud name in clouds.yaml."),
     recommended: bool = typer.Option(
@@ -168,7 +175,7 @@ def run(
     logger.remove()
     logger.add(sys.stderr, format=log_fmt, level=level, colorize=True)
 
-    definitions = get_flavor_definitions(name)
+    definitions = get_flavor_definitions(name, url)
     manager = FlavorManager(
         cloud=Cloud(cloud), definitions=definitions, recommended=recommended
     )
