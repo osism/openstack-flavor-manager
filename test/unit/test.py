@@ -131,7 +131,7 @@ class TestGetFlavorDefinitions(unittest.TestCase):
     def test_get_flavor_definitions_0(self, mock_get):
         mock_get.return_value.status_code = 200
         mock_get.return_value.content = MOCK_YML
-        result = get_flavor_definitions("scs")
+        result = get_flavor_definitions("scs", None)
 
         expected_result = yaml.safe_load(MOCK_YML)
 
@@ -145,7 +145,7 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         mock_get.return_value.raise_for_status = mock.Mock(side_effect=HTTPError())
 
         # Check if the function raises an exception
-        self.assertRaises(HTTPError, get_flavor_definitions, "scs")
+        self.assertRaises(HTTPError, get_flavor_definitions, "scs", None)
 
     @patch("requests.Session.get")
     def test_get_flavor_definitions_2(self, mock_get):
@@ -153,18 +153,18 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         mock_get.return_value.content = "-" + MOCK_YML
 
         # Check if the function raises an invalid yaml exception
-        self.assertRaises(ParserError, get_flavor_definitions, "scs")
+        self.assertRaises(ParserError, get_flavor_definitions, "scs", None)
 
     def test_get_flavor_definitions_3(self):
         # Here we _actually_ download the YML files uploaded to GitHub
         # Therefore, this test requires an active internet connection
 
         # Resolve 'scs' to correct url
-        result = get_flavor_definitions("scs")
+        result = get_flavor_definitions("scs", None)
         self.assertIs(type(result), dict)
 
         # Resolve 'osism' to correct url
-        result = get_flavor_definitions("osism")
+        result = get_flavor_definitions("osism", None)
         self.assertIs(type(result), dict)
 
     @patch("io.open")
@@ -174,7 +174,7 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         mock_open.return_value = BytesIO(bytes(MOCK_YML, encoding="utf-8"))
         mock_open.return_value.fileno = MagicMock()
 
-        result = get_flavor_definitions("local")
+        result = get_flavor_definitions("local", None)
 
         expected_result = yaml.safe_load(MOCK_YML)
 
