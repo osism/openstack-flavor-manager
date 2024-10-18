@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 PyYAML = "==6.0.2"
 loguru = "==0.7.2"
-openstacksdk = "==4.0.0"
+openstacksdk = "==4.1.0"
 requests = "==2.32.3"
 requests-file = "==2.1.0"
 typer = {version = "==0.12.5", extras = ["all"]}
