@@ -9,7 +9,7 @@ loguru = "==0.7.2"
 openstacksdk = "==4.1.0"
 requests = "==2.32.3"
 requests-file = "==2.1.0"
-typer = {version = "==0.15.0", extras = ["all"]}
+typer = {version = "==0.15.1", extras = ["all"]}
 
 [dev-packages]
 munch = "==4.0.0"
