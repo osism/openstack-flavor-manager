@@ -89,12 +89,24 @@ class Cloud:
 
 class FlavorManager:
     def __init__(
-        self, cloud: Cloud, definitions: dict, recommended: bool = False
+        self,
+        cloud: Cloud,
+        definitions: dict,
+        recommended: bool = False,
+        limit_memory: int = 32,
     ) -> None:
         self.required_flavors = definitions["mandatory"]
         self.cloud = cloud
         if recommended:
-            self.required_flavors = self.required_flavors + definitions["recommended"]
+            recommended_flavors = definitions["recommended"]
+            # Filter recommended flavors based on memory limit
+            limit_memory_mb = limit_memory * 1024
+            filtered_recommended = [
+                flavor
+                for flavor in recommended_flavors
+                if flavor.get("ram", 0) <= limit_memory_mb
+            ]
+            self.required_flavors = self.required_flavors + filtered_recommended
 
         self.defaults_dict = {}
         for item in definitions["reference"]:
@@ -158,6 +170,9 @@ def run(
     recommended: bool = typer.Option(
         False, "--recommended", help="Create recommended flavors."
     ),
+    limit_memory: int = typer.Option(
+        32, "--limit-memory", help="Limit memory in GB for recommended flavors."
+    ),
 ) -> None:
     if debug:
         level = "DEBUG"
@@ -177,7 +192,10 @@ def run(
 
     definitions = get_flavor_definitions(name, url)
     manager = FlavorManager(
-        cloud=Cloud(cloud), definitions=definitions, recommended=recommended
+        cloud=Cloud(cloud),
+        definitions=definitions,
+        recommended=recommended,
+        limit_memory=limit_memory,
     )
     manager.run()
 
