@@ -3,16 +3,16 @@
     name: SECRET_OPENSTACK_FLAVOR_MANAGER
     data:
       PYPI_API_TOKEN: !encrypted/pkcs1-oaep
-        - ExrB71LLJk5aFG4hAl22AV27dVZoMPvTyZ6ZvLWeKjv00cUfMzjUNHW+E+JvTo2BP4OE4
-          0D3v8FXZBJ5HODxffK6hXi9eIQ8oj7MYvu8i7lRl5hyqC9/rXUaJ+2kXseKMvUR1x2s8F
-          LuZW5w2aoXOfqVMoKAhxopnC0u2iXNRa1uJ9kYT+tLntoveLV3+7bXqUh0r4PJt8d/oqB
-          G/amp6UFBPsXQ7IMWi1x9AnzooHmWOeasrr1QxG6tgZSLcelMIU7/zo5xOxNoNqjlTUT/
-          pDDO00HfhhQjILScxBZ4JOT/qs0oH3lpKxK0ZWn8/Xgwc0lMHfgYUgdTPMJbRmudqfq//
-          OmhUu1h0WQdQjjJysc+725vaPsi5HQTvNQVhh6LZQiAYPSdJyMr4E4Rt75XVHtk3w3gws
-          sx0IViiFGiMOVGpZ0uzWBPMdnXd9JFPhprIj4W85ry0xPAyb3TItNhdpxthmDEsXwHq9v
-          NZaQnjvyB0GVq0UU5P6M+F9VFcascPOY+4XomYLs6SKVAnNuHlTBeJonlSqf62eH34XrK
-          wj9Ld1g3B+VR0eozcnqMxh78APO52X1RYYUti0QNPNh50fk1eVapfNV19zCPRTRHYovR2
-          6Jj6YNefzmb8N3O+eMZIgGSSbXnbhj2i8uhQ7UPVElwDSkG0DIAcRNkxZT4BE4=
+        - y+Q3RQ8f4wECxOr6lj5n3A76zBXNIEWI+BN8V46uDrMqGmsZTew2SMDCbEFFwAE3P+Ji/
+          ZByjWnoyTAZbs6i6iyeihk7/OS33i/AoC5IZfVUT4ceEhvXyuFfOUGJfNAmkMg1eMqDBY
+          SQsiKk2UbkxGyG3RQWiwarcenoviOta8092AtpVWtJxsLM3tUlOQKdbQMf2WN3zXthGcE
+          7Ihoq7OtaeoYxWUsl1pvebE2AIku9WH/bazTS5d6A+k6nyBtzwOsnmJ19shF7dcpJymc2
+          1iQUrUNOyKzhV8ZGIdaJ4PmVjF9dbET26WYTL8ZXxm5C9sf9SlUJop9Q4qCpCbpwbzYaB
+          rGwOuxuQHO0/y1g2eXfdoxRuJs+38Z7pYKt0JQHar675SJDV8dUjr4fL0s6biwQKYGa2o
+          FI4axfNBA4LAWm3rNDdsjP3+yGHx7j/KdrLoKLTsadxk/66zuIfPfRGo6030F5rI5Rhy4
+          ypTQddIQjz1i5R/itzRbGJZGWobpnl+j6rt4u6YZpwS6bSdk0WBq75GCvSI2lN0355hvF
+          +UXt+DWtVzd8rwxJwAwINhR+t4yp5PuQMOeb4IcpL4baY1BHUAUkADLIhFhmPcmDXk+7D
+          wwG03QW+0omlGT1USlW6VhqVcqcfxATXWfu8hUJmhur76yuQbTOnB9dQgkyPk8=
 
 - job:
     name: openstack-flavor-manager-integration-test
