@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fe5f732c80f0a02d207d02488a3fcd259cee9f1fd2a5dd4b9e6ae7abb9739d55"
+            "sha256": "5624906d491c681035d188953465bcd6f5315125b0a0c6f4e53dd329b656335c"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -322,12 +322,12 @@
         },
         "openstacksdk": {
             "hashes": [
-                "sha256:0ea54ce3005d48c5134f77dce8df7dd6b4c52d2a103472abc99db19cd4382638",
-                "sha256:e47e166c4732e9aea65228e618d490e4be5df06526a1b95e2d5995d7d0977d3d"
+                "sha256:35b5df0f16b126b23a420cefa771b5066ac87351f9c8ee1e44677f9e4bf88f48",
+                "sha256:ee6b853897b3eef347fa5042187174026ad181a95ff6e6933841f5f9c697b1bd"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==4.6.0"
+            "version": "==4.7.0"
         },
         "os-service-types": {
             "hashes": [
