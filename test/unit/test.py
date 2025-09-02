@@ -51,6 +51,14 @@ recommended:
   cpus: 8
   ram: 32768
   disk: 0
+- name: SCS-16V-64
+  cpus: 16
+  ram: 65536
+  disk: 0
+- name: SCS-32V-128
+  cpus: 32
+  ram: 131072
+  disk: 0
 """
 
 
@@ -124,6 +132,39 @@ class TestCLIArguments(unittest.TestCase):
 
         # Check that '--debug' is a valid global CLI option
         self.assertEqual(result.exit_code, 0)
+
+    @patch("openstack_flavor_manager.main.get_flavor_definitions")
+    @patch("openstack_flavor_manager.main.Cloud")
+    @patch("openstack_flavor_manager.main.FlavorManager.run")
+    @patch("openstack_flavor_manager.main.FlavorManager.__init__")
+    def test_limit_memory_option(
+        self,
+        mock_flavor_manager_init,
+        mock_run,
+        mock_cloud_class,
+        mock_get_flavor_definitions,
+    ):
+        mock_cloud_instance = mock_cloud_class.return_value
+        mock_flavor_manager_init.return_value = None
+        mock_get_flavor_definitions.return_value = {}
+
+        # Test default limit-memory value
+        result = self.runner.invoke(app, ["--name=scs", "--recommended"])
+        self.assertEqual(result.exit_code, 0)
+
+        # Test custom limit-memory value
+        result = self.runner.invoke(
+            app, ["--name=scs", "--recommended", "--limit-memory=64"]
+        )
+        self.assertEqual(result.exit_code, 0)
+
+        # Test that FlavorManager is called with limit_memory parameter
+        mock_flavor_manager_init.assert_called_with(
+            cloud=mock_cloud_instance,
+            definitions={},
+            recommended=True,
+            limit_memory=64,
+        )
 
 
 class TestGetFlavorDefinitions(unittest.TestCase):
@@ -206,7 +247,8 @@ class TestFlavorManager(unittest.TestCase):
         mock_init.return_value = None
         c = Cloud(cloud="testcloud")
 
-        manager = FlavorManager(c, definitions, True)
+        # Use limit_memory=128 to include all recommended flavors
+        manager = FlavorManager(c, definitions, recommended=True, limit_memory=128)
 
         expected_result = {item["name"]: item for item in definitions["mandatory"]}
         for item in definitions["recommended"]:
@@ -217,6 +259,80 @@ class TestFlavorManager(unittest.TestCase):
         # Check if mandatory + recommended items are added to the FlavorManager object
         self.assertEqual(manager.cloud, c)
         self.assertEqual(expected_result, actual_result)
+
+    @patch("openstack_flavor_manager.main.Cloud.__init__")
+    def test_init_with_limit_memory(self, mock_init):
+        definitions = yaml.safe_load(MOCK_YML)
+
+        mock_init.return_value = None
+        c = Cloud(cloud="testcloud")
+
+        # Test with limit_memory=32GB (32768MB)
+        manager = FlavorManager(c, definitions, recommended=True, limit_memory=32)
+
+        expected_result = {item["name"]: item for item in definitions["mandatory"]}
+        # Only SCS-8V-32 should be included (32768MB <= 32768MB)
+        # SCS-16V-64 (65536MB) and SCS-32V-128 (131072MB) should be filtered out
+        for item in definitions["recommended"]:
+            if item["ram"] <= 32768:
+                expected_result[item["name"]] = item
+
+        actual_result = {item["name"]: item for item in manager.required_flavors}
+
+        # Check if memory filtering works correctly
+        self.assertEqual(manager.cloud, c)
+        self.assertEqual(expected_result, actual_result)
+        self.assertIn("SCS-8V-32", actual_result)
+        self.assertNotIn("SCS-16V-64", actual_result)
+        self.assertNotIn("SCS-32V-128", actual_result)
+
+    @patch("openstack_flavor_manager.main.Cloud.__init__")
+    def test_init_with_limit_memory_64gb(self, mock_init):
+        definitions = yaml.safe_load(MOCK_YML)
+
+        mock_init.return_value = None
+        c = Cloud(cloud="testcloud")
+
+        # Test with limit_memory=64GB (65536MB)
+        manager = FlavorManager(c, definitions, recommended=True, limit_memory=64)
+
+        expected_result = {item["name"]: item for item in definitions["mandatory"]}
+        # SCS-8V-32 (32768MB) and SCS-16V-64 (65536MB) should be included
+        # SCS-32V-128 (131072MB) should be filtered out
+        for item in definitions["recommended"]:
+            if item["ram"] <= 65536:
+                expected_result[item["name"]] = item
+
+        actual_result = {item["name"]: item for item in manager.required_flavors}
+
+        # Check if memory filtering works correctly
+        self.assertEqual(manager.cloud, c)
+        self.assertEqual(expected_result, actual_result)
+        self.assertIn("SCS-8V-32", actual_result)
+        self.assertIn("SCS-16V-64", actual_result)
+        self.assertNotIn("SCS-32V-128", actual_result)
+
+    @patch("openstack_flavor_manager.main.Cloud.__init__")
+    def test_init_with_limit_memory_low(self, mock_init):
+        definitions = yaml.safe_load(MOCK_YML)
+
+        mock_init.return_value = None
+        c = Cloud(cloud="testcloud")
+
+        # Test with limit_memory=16GB (16384MB)
+        manager = FlavorManager(c, definitions, recommended=True, limit_memory=16)
+
+        expected_result = {item["name"]: item for item in definitions["mandatory"]}
+        # No recommended flavors should be included as all have more than 16GB RAM
+
+        actual_result = {item["name"]: item for item in manager.required_flavors}
+
+        # Check if memory filtering works correctly - only mandatory flavors should remain
+        self.assertEqual(manager.cloud, c)
+        self.assertEqual(expected_result, actual_result)
+        self.assertNotIn("SCS-8V-32", actual_result)
+        self.assertNotIn("SCS-16V-64", actual_result)
+        self.assertNotIn("SCS-32V-128", actual_result)
 
     @patch("openstack_flavor_manager.main.Cloud.__init__")
     def test_init_2(self, mock_init):
@@ -261,7 +377,8 @@ class TestFlavorManager(unittest.TestCase):
         mock_init.return_value = None
         c = Cloud(cloud="testcloud")
 
-        manager = FlavorManager(c, definitions, True)
+        # Use limit_memory=128 to include all recommended flavors
+        manager = FlavorManager(c, definitions, recommended=True, limit_memory=128)
         manager.run()
 
         # Check if set_flavor was called once for all mandatory + recommended entries
@@ -295,7 +412,8 @@ class TestFlavorManager(unittest.TestCase):
         mock_init.return_value = None
         c = Cloud(cloud="testcloud")
 
-        manager = FlavorManager(c, definitions, True)
+        # Use limit_memory=128 to include all recommended flavors
+        manager = FlavorManager(c, definitions, recommended=True, limit_memory=128)
         manager.run()
 
         # Check if set_flavor was called with the correct arguments for recommended flavors
