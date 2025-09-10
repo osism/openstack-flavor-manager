@@ -1,3 +1,7 @@
+# NOTE this file is not intended to make your environment fit for SCS.
+# For this purpose, use the file at
+# https://raw.githubusercontent.com/SovereignCloudStack/standards/main/Tests/iaas/SCS-Spec.MandatoryFlavors.verbose.yaml
+# -- the openstack-image-manager will do that for you by default!
 ---
 reference:
   - field: name
