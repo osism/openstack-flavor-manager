@@ -98,15 +98,21 @@ class FlavorManager:
         self.required_flavors = definitions["mandatory"]
         self.cloud = cloud
         if recommended:
-            recommended_flavors = definitions["recommended"]
-            # Filter recommended flavors based on memory limit
-            limit_memory_mb = limit_memory * 1024
-            filtered_recommended = [
-                flavor
-                for flavor in recommended_flavors
-                if flavor.get("ram", 0) <= limit_memory_mb
-            ]
-            self.required_flavors = self.required_flavors + filtered_recommended
+            if "recommended" in definitions:
+                recommended_flavors = definitions["recommended"]
+                # Filter recommended flavors based on memory limit
+                limit_memory_mb = limit_memory * 1024
+                filtered_recommended = [
+                    flavor
+                    for flavor in recommended_flavors
+                    if flavor.get("ram", 0) <= limit_memory_mb
+                ]
+                self.required_flavors = self.required_flavors + filtered_recommended
+            else:
+                logger.warning(
+                    "Recommended flavors requested but 'recommended' section not found in definitions. "
+                    "Only mandatory flavors will be processed."
+                )
 
         self.defaults_dict = {}
         for item in definitions["reference"]:
