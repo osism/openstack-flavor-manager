@@ -143,6 +143,10 @@ def get_flavor_definitions(source: str, url: str) -> dict:
         source_type = "local"
         if not url:
             url = "file:///data/flavors.yaml"
+    elif source == "cloudpod":
+        source_type = "cloudpod"
+        if not url:
+            url = "file:///data/cloudpod.yaml"
     elif source == "url":
         source_type = "url"
         if not url:
