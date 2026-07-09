@@ -196,17 +196,34 @@ class TestGetFlavorDefinitions(unittest.TestCase):
         # Check if the function raises an invalid yaml exception
         self.assertRaises(ParserError, get_flavor_definitions, "scs", None)
 
-    def test_get_flavor_definitions_3(self):
-        # Here we _actually_ download the YML files uploaded to GitHub
-        # Therefore, this test requires an active internet connection
+    @patch("requests.Session.get")
+    def test_get_flavor_definitions_3(self, mock_get):
+        # Check that the 'scs' and 'osism' sources resolve to the correct
+        # GitHub URLs. The download is mocked so this test does not require
+        # network access (avoids adding load to raw.githubusercontent.com).
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.content = MOCK_YML
+
+        scs_url = (
+            "https://raw.githubusercontent.com/SovereignCloudStack/standards/"
+            "main/Tests/iaas/SCS-Spec.MandatoryFlavors.verbose.yaml"
+        )
+        osism_url = (
+            "https://raw.githubusercontent.com/osism/"
+            "openstack-flavor-manager/main/flavors.yaml"
+        )
 
         # Resolve 'scs' to correct url
         result = get_flavor_definitions("scs", None)
         self.assertIs(type(result), dict)
+        mock_get.assert_called_once_with(scs_url)
+
+        mock_get.reset_mock()
 
         # Resolve 'osism' to correct url
         result = get_flavor_definitions("osism", None)
         self.assertIs(type(result), dict)
+        mock_get.assert_called_once_with(osism_url)
 
     @patch("io.open")
     def test_get_flavor_definitions_4(self, mock_open):
