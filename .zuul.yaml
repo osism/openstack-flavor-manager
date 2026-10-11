@@ -16,6 +16,7 @@
 
 - job:
     name: openstack-flavor-manager-integration-test
+    nodeset: ubuntu-noble
     pre-run: playbooks/pre-integration-test.yml
     run: playbooks/integration-test.yml
     # The deployment of Devstack can take more time than our default timeout.
