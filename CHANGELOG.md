@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 This file was started on September 04, 2023. Changes prior to this date are not included in the CHANGELOG.
 
+## [v0.20261111.0] - 2026-11-11
+
+### Fixed
+- Pin the integration test job to the ubuntu-noble nodeset to fix devstack failures after the base job switched to the debian-trixie default (osism/openstack-flavor-manager#193)
+
+### Dependencies
+- openstacksdk 4.20.0 → 4.22.0 (osism/openstack-flavor-manager#191, osism/openstack-flavor-manager#194)
+- typer 0.27.2 → 0.27.3 (osism/openstack-flavor-manager#190)
+
 ## [v0.20261007.0] - 2026-10-07
 
 ### Dependencies
