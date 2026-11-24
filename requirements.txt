@@ -1,4 +1,4 @@
-PyYAML==6.0.3
+PyYAML==6.0.4
 loguru==0.8.0
 openstacksdk==4.22.0
 requests-file==3.0.1
