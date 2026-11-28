@@ -538,7 +538,6 @@ class TestCloud(unittest.TestCase):
             disk=0,
             ephemeral=0,
             swap=0,
-            rxtx_factor=1.0,
             is_public=True,
             flavorid="auto",
         )
