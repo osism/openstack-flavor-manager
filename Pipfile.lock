@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6640e847508b5847f89e29ea1b29c0256b4278ba33897c30093cb146dda1c166"
+            "sha256": "a99300dfdc52046ef3a0df06e531a042ada5b1a75782c1f7903357afcac3e11b"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -445,11 +445,11 @@
         },
         "keystoneauth1": {
             "hashes": [
-                "sha256:4dcfa141e63836d2d16edd086494cb5cb3aa92fc7f57c9ff33086e180557f638",
-                "sha256:c344dbe0d096a01b37e2c282f4ece5c6e96d50811da791c676ef8ef967f45133"
+                "sha256:7e19fe0029b2afb62a5833295dac54d587d175fda9f04c6182865ad719f5f87f",
+                "sha256:c72a66b3c8546602be8fd1de86fdee71390b4983188489cffe049ed71e28375d"
             ],
             "markers": "python_version >= '3.11'",
-            "version": "==5.19.0"
+            "version": "==5.20.0"
         },
         "loguru": {
             "hashes": [
@@ -478,12 +478,12 @@
         },
         "openstacksdk": {
             "hashes": [
-                "sha256:757f399346f804d0a70b83fead919c498521e509889cd8973ece5cf7a640e6f9",
-                "sha256:e5aafe38e4c338bcb3844f1f446d7761c68477db8cec0e4bb91f4de9d35877c1"
+                "sha256:23c3157032d142e2b6ad5e7582a307cbc513b240509ee2dfdcc8dea8773d2096",
+                "sha256:a7eb1c330128d9fd776e57449e53e9949d1f7a6d53dd95525b3bbc9c2a686143"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.11'",
-            "version": "==4.22.0"
+            "version": "==4.25.0"
         },
         "os-service-types": {
             "hashes": [
@@ -503,11 +503,11 @@
         },
         "platformdirs": {
             "hashes": [
-                "sha256:1e34af590de4d978631b751eb2202f2fee4497537a17c1720b12fcf57b331392",
-                "sha256:96893d686e84e9e6f358a9ea41a8de544df66dbf2ba6cda250e7dc73acf85b9b"
+                "sha256:c6b188e03ffd4dfe1bf8c4bcb47cd94711af244a9852dbff60297bd753684d5d",
+                "sha256:d0d3a23e7ff282cfa94b77f5a22b81030dcb68ba0430f90c74f4bd8d090782ea"
             ],
             "markers": "python_version >= '3.11'",
-            "version": "==4.14.8"
+            "version": "==4.14.9"
         },
         "psutil": {
             "hashes": [
