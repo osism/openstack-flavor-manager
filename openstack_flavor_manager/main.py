@@ -60,7 +60,6 @@ class Cloud:
                 ),
                 ephemeral=0,
                 swap=0,
-                rxtx_factor=1.0,
                 is_public=get_spec_or_default(
                     key_string="public", flavor_spec=flavor_spec, defaults=defaults
                 ),
